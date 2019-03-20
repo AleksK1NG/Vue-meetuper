@@ -5,8 +5,22 @@ import AppHero from './components/shared/AppHero';
 
 Vue.config.productionTip = false;
 
+/*
+ * Global Components
+ * */
 Vue.component('AppHero', AppHero);
 Vue.component('AppDropdown', AppDropdown);
+
+/*
+ * Filters
+ * */
+Vue.filter('capitalize', value => {
+  if (value && typeof value === 'string') {
+    return value[0].toUpperCase() + value.slice(1);
+  }
+
+  return '';
+});
 
 new Vue({
   render: h => h(App)

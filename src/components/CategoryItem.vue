@@ -5,7 +5,7 @@
         <figure class="image is-4by3 imageFade">
           <img class="is-rounded" :src="category.image" alt="" />
         </figure>
-        <div class="subtitle m-t-xs bold">{{ category.name }}</div>
+        <div class="subtitle m-t-xs bold">{{ category.name | capitalize }}</div>
       </span>
     </a>
   </div>
