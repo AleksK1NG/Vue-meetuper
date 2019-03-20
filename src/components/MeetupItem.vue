@@ -13,8 +13,8 @@
             <div class="level-item has-text-centered">
               <div>
                 <!-- GET Start Date Image -->
-                <p class="title">{{ meetup.startDate }}}</p>
-                <p class="title">{{ meetup.startDate }}</p>
+                <p class="title">{{ meetup.startDate | formatDate('MMM') }}</p>
+                <p class="title">{{ meetup.startDate | formatDate('D') }}</p>
               </div>
             </div>
           </div>
