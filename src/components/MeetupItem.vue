@@ -1,9 +1,10 @@
 <template>
   <div class="column is-one-third">
     <!--    <router-link :to="'/meetups/' + meetup._id" class="card large">-->
+    <div class="card large"></div>
     <router-link
       :to="{ name: 'PageMeetupDetail', params: { id: meetup._id } }"
-      class="card large"
+      class="card-meetup-link"
     >
       <div class="card-image">
         <figure class="image is-4by3">
@@ -57,4 +58,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.card-meetup-link {
+  color: #000;
+}
+</style>

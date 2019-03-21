@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar is-spaced" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <router-link :to="'/'" class="navbar-item" >
+      <router-link :to="'/'" class="navbar-item">
         <h1 class="title is-4">Meetuper</h1>
       </router-link>
       <a
@@ -23,9 +23,9 @@
           Home
         </router-link>
 
-        <a class="navbar-item">
+        <router-link :to="{ name: 'PageMeetupFind' }" class="navbar-item">
           Find
-        </a>
+        </router-link>
 
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
