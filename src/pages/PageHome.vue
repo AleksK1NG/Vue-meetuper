@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppHero />
-    <div class="container">
+    <div v-if="!loading" class="container">
       <section class="section">
         <div class="m-b-lg">
           <h1 class="title is-inline">Featured Meetups in "Location"</h1>
@@ -38,7 +38,11 @@
         </div>
       </section>
     </div>
+    <div v-else class="container">
+      <AppSpinner />
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -50,8 +54,13 @@ export default {
     CategoryItem,
     MeetupItem
   },
+  data() {
+    return {
+      isDataLoaded: false
+    };
+  },
   computed: {
-    ...mapGetters(['meetups', 'categories'])
+    ...mapGetters(['meetups', 'categories', 'loading'])
   },
   created() {
     this.$store.dispatch('fetchMeetups');
