@@ -42,7 +42,6 @@
       <AppSpinner />
     </div>
   </div>
-
 </template>
 
 <script>
@@ -60,9 +59,22 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['meetups', 'categories', 'loading'])
+    ...mapGetters([
+      'meetups',
+      'categories',
+      'categoriesLoading',
+      'threadsLoding'
+    ]),
+    loading() {
+      return this.categoriesLoading && this.threadsLoding;
+    }
   },
   created() {
+    console.log(
+      'page home loading status => ',
+      this.categoriesLoading,
+      this.threadsLoding
+    );
     this.$store.dispatch('fetchMeetups');
     this.$store.dispatch('fetchCategories');
   }

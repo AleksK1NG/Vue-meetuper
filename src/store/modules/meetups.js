@@ -21,6 +21,9 @@ export default {
     },
     meetup(state) {
       return state.meetup;
+    },
+    meetupsLoading(state) {
+      return state.loading
     }
   },
   mutations: {

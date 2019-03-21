@@ -12,7 +12,7 @@ export default {
     categories(state) {
       return state.categories;
     },
-    loading(state) {
+    categoriesLoading(state) {
       return state.loading;
     }
   },

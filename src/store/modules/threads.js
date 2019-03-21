@@ -12,6 +12,9 @@ export default {
   getters: {
     threads(state) {
       return state.threads;
+    },
+    threadsLoding(state) {
+      return state.loading;
     }
   },
   mutations: {
@@ -22,22 +25,22 @@ export default {
       state.error = error;
     },
     [SET_LOADING](state, payload) {
-      state.loading = payload
+      state.loading = payload;
     }
   },
   actions: {
     async fetchThreads({ commit }, meetupId) {
       commit(SET_THREADS, {});
-      commit(SET_LOADING, true)
+      commit(SET_LOADING, true);
       try {
         const { data } = await axios.get(
           `/api/v1/threads?meetupId=${meetupId}`
         );
         commit(SET_THREADS, data);
-        commit(SET_LOADING, false)
+        commit(SET_LOADING, false);
       } catch (error) {
         commit(SET_ERROR, error);
-        commit(SET_LOADING, false)
+        commit(SET_LOADING, false);
       }
     }
   }
