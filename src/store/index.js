@@ -60,6 +60,7 @@ export default new Vuex.Store({
       }
     },
     async fetchMeetupById({ commit }, id) {
+      commit(SET_MEETUP, {});
       try {
         const { data } = await axios.get(`/api/v1/meetups/${id}`);
         commit(SET_MEETUP, data);
@@ -76,6 +77,7 @@ export default new Vuex.Store({
       }
     },
     async fetchThreads({ commit }, meetupId) {
+      commit(SET_THREADS, {});
       try {
         const { data } = await axios.get(
           `/api/v1/threads?meetupId=${meetupId}`
