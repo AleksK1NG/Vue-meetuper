@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapGetters } from 'vuex';
 import CategoryItem from '../components/CategoryItem';
 import MeetupItem from '../components/MeetupItem';
 export default {
@@ -50,29 +50,12 @@ export default {
     CategoryItem,
     MeetupItem
   },
-  data() {
-    return {
-      categories: [],
-      meetups: []
-    };
+  computed: {
+    ...mapGetters(['meetups', 'categories'])
   },
   created() {
-    axios
-      .get('/api/v1/categories')
-      .then(res => {
-        this.categories = res.data;
-      })
-      .catch(err => {
-        console.error(err);
-      });
-    axios
-      .get('/api/v1/meetups')
-      .then(res => {
-        this.meetups = res.data;
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    this.$store.dispatch('fetchMeetups');
+    this.$store.dispatch('fetchCategories');
   }
 };
 </script>
