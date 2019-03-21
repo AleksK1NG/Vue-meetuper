@@ -157,39 +157,19 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapGetters } from 'vuex';
 export default {
   name: 'PageMeetupDetail',
-  data() {
-    return {
-      meetup: {},
-      threads: [],
-      error: null
-    };
+
+  computed: {
+    ...mapGetters(['meetup', 'threads']),
+    meetupCrearor() {
+      return this.meetup.meetupCreator || {};
+    }
   },
   created() {
-    axios
-      .get(`/api/v1/meetups/${this.$route.params.id}`)
-      .then(res => {
-        this.meetup = res.data;
-      })
-      .catch(err => {
-        this.error = err;
-      });
-
-    axios
-      .get(`/api/v1/threads?meetupId=${this.$route.params.id}`)
-      .then(res => {
-        this.threads = res.data;
-      })
-      .catch(err => {
-        this.error = err;
-      });
-  },
-  computed: {
-    meetupCrearor() {
-      return this.meetup.meetupCreator || '';
-    }
+    this.$store.dispatch('fetchMeetupById', this.$route.params.id);
+    this.$store.dispatch('fetchThreads', this.$route.params.id);
   }
 };
 </script>
