@@ -7,6 +7,7 @@ import AppDropdown from './components/shared/AppDropdown';
 import AppHero from './components/shared/AppHero';
 
 import moment from 'moment';
+import AppSpinner from './components/shared/AppSpinner';
 
 Vue.config.productionTip = false;
 
@@ -15,6 +16,7 @@ Vue.config.productionTip = false;
  * */
 Vue.component('AppHero', AppHero);
 Vue.component('AppDropdown', AppDropdown);
+Vue.component('AppSpinner', AppSpinner);
 
 /*
  * Filters
