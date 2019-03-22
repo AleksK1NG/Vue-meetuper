@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { SET_ERROR, SET_LOADING, SET_USER } from '../actionTypes';
+import {
+  SET_ERROR,
+  SET_IS_AUTH_RESOLVED,
+  SET_LOADING,
+  SET_USER
+} from '../actionTypes';
 import router from '../../router';
 
 export default {
@@ -7,7 +12,8 @@ export default {
   state: {
     user: null,
     error: null,
-    loading: false
+    loading: false,
+    isAuthResolved: false
   },
   getters: {
     user(state) {
@@ -18,6 +24,9 @@ export default {
     },
     authLoading(state) {
       return state.loading;
+    },
+    isAuthResolved(state) {
+      return state.isAuthResolved
     }
   },
   mutations: {
@@ -29,6 +38,9 @@ export default {
     },
     [SET_LOADING](state, payload) {
       state.loading = payload;
+    },
+    [SET_IS_AUTH_RESOLVED](state, payload) {
+      return (state.isAuthResolved = payload);
     }
   },
   actions: {
@@ -63,10 +75,12 @@ export default {
         const { data } = await axios.get('/api/v1/users/me');
         commit(SET_USER, data);
         commit(SET_LOADING, false);
+        commit(SET_IS_AUTH_RESOLVED, true);
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_USER, null);
         commit(SET_LOADING, false);
+        commit(SET_IS_AUTH_RESOLVED, true);
       }
     },
     async logout({ commit }) {

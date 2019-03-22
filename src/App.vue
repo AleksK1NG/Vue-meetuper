@@ -1,14 +1,18 @@
 <template>
-  <div id="app">
+  <div v-if="isAuthResolved" id="app">
     <TheNavbar />
     <div class="page-wrapper">
       <router-view />
     </div>
     <TheFooter />
   </div>
+  <div v-else class="container">
+    <AppSpinner />
+  </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import TheNavbar from '@/components/shared/TheNavbar';
 import TheFooter from '@/components/shared/TheFooter';
 export default {
@@ -16,6 +20,9 @@ export default {
   components: {
     TheNavbar,
     TheFooter
+  },
+  computed: {
+    ...mapGetters(['isAuthResolved'])
   },
   created() {
     this.$store.dispatch('getAuthUser');
