@@ -11,7 +11,10 @@ export default {
   },
   getters: {
     user(state) {
-      return state.user;
+      return state.user || null
+    },
+    isAuthenticated(state) {
+      return !!state.user
     },
     authLoading(state) {
       return state.loading;
