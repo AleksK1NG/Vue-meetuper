@@ -90,3 +90,8 @@ exports.login = function(req, res, next) {
     }
   })(req, res, next);
 };
+
+exports.logout = function(req, res) {
+  req.logout();
+  return res.status(200).json({ status: 'Session destroyed' });
+};
