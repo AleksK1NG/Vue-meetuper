@@ -77,6 +77,11 @@
                     <span v-if="!$v.form.avatar.url" class="help is-danger"
                       >Url format is not valid!</span
                     >
+                    <span
+                      v-if="!$v.form.avatar.supportedFileType"
+                      class="help is-danger"
+                      >Selected file type is not valid!</span
+                    >
                   </div>
                 </div>
               </div>
@@ -160,10 +165,8 @@ import {
   minLength,
   sameAs
 } from 'vuelidate/lib/validators';
-import Vue from 'vue';
-import vuelidate from 'vuelidate';
+import { supportedFileType } from '@/helpers/validators';
 
-Vue.use(vuelidate);
 export default {
   name: 'PageRegister',
   data() {
@@ -183,7 +186,7 @@ export default {
       username: { required },
       name: { required },
       email: { required, email },
-      avatar: { url },
+      avatar: { url, supportedFileType },
       password: { required, minLength: minLength(6) },
       passwordConfirmation: { required, sameAsPassword: sameAs('password') }
     }
