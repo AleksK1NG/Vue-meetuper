@@ -17,12 +17,21 @@ const store = new MongoDBStore({
 
 store.on('error', err => console.log(err));
 
+
+/*
+* Models
+* */
 require('./models/meetups');
 require('./models/users');
 require('./models/threads');
 require('./models/posts');
 require('./models/categories');
 
+require('./services/passport');
+
+/*
+* Routes
+* */
 const meetupsRoutes = require('./routes/meetups');
 const usersRoutes = require('./routes/users');
 const threadsRoutes = require('./routes/threads');

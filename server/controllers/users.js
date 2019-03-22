@@ -1,5 +1,5 @@
 const User = require('../models/users');
-const passport = require('passport')
+const passport = require('passport');
 
 exports.getUsers = function(req, res) {
   User.find({}).exec((errors, users) => {
@@ -49,7 +49,7 @@ exports.register = function(req, res) {
   });
 };
 
-exports.login = function(req, res) {
+exports.login = function(req, res, next) {
   const { email, password } = req.body;
 
   if (!email) {
@@ -68,8 +68,25 @@ exports.login = function(req, res) {
     });
   }
 
-  return password.authenticate('local', (err, passportUser) => {
+  return passport.authenticate('local', (err, passportUser) => {
+    if (err) {
+      return next(err);
+    }
 
-  })
+    if (passportUser) {
+      req.login(passportUser, function(err) {
+        if (err) {
+          next(err);
+        }
 
+        return res.status(200).json(passportUser);
+      });
+    } else {
+      return res.status(422).send({
+        errors: {
+          authentication: 'Ooops, something went wrong!'
+        }
+      });
+    }
+  })(req, res, next);
 };
