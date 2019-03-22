@@ -56,6 +56,18 @@ export default {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
       }
-    }
+    },
+    async getAuthUser({ commit }) {
+      commit(SET_LOADING, true);
+      try {
+        const { data } = await axios.get('/api/v1/users/me');
+        commit(SET_USER, data);
+        commit(SET_LOADING, false);
+      } catch (error) {
+        commit(SET_ERROR, error);
+        commit(SET_USER, null);
+        commit(SET_LOADING, false);
+      }
+    },
   }
 };
