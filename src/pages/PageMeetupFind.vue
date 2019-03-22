@@ -86,6 +86,7 @@ export default {
     ...mapGetters(['meetups'])
   },
   created() {
+
     this.$store.dispatch('fetchMeetups');
   }
 };

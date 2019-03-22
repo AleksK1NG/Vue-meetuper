@@ -8,6 +8,8 @@ import AppHero from './components/shared/AppHero';
 
 import moment from 'moment';
 import AppSpinner from './components/shared/AppSpinner';
+import Vuelidate from 'vuelidate';
+Vue.use(Vuelidate);
 
 Vue.config.productionTip = false;
 
@@ -38,5 +40,6 @@ Vue.filter('formatDate', (value, formatType = 'LL') => {
 new Vue({
   router,
   store,
+  Vuelidate,
   render: h => h(App)
 }).$mount('#app');

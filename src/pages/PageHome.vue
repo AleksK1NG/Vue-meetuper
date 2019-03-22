@@ -70,11 +70,11 @@ export default {
     }
   },
   created() {
-    console.log(
-      'page home loading status => ',
-      this.categoriesLoading,
-      this.threadsLoding
-    );
+    // console.log(
+    //   'page home loading status => ',
+    //   this.categoriesLoading,
+    //   this.threadsLoding
+    // );
     this.$store.dispatch('fetchMeetups');
     this.$store.dispatch('fetchCategories');
   }
