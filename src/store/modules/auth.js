@@ -11,10 +11,10 @@ export default {
   },
   getters: {
     user(state) {
-      return state.user || null
+      return state.user || null;
     },
     isAuthenticated(state) {
-      return !!state.user
+      return !!state.user;
     },
     authLoading(state) {
       return state.loading;
@@ -69,5 +69,16 @@ export default {
         commit(SET_LOADING, false);
       }
     },
+    async logout({ commit }) {
+      commit(SET_LOADING, true);
+      try {
+        await axios.post('/api/v1/users/logout');
+        commit(SET_USER, null);
+        commit(SET_LOADING, false);
+      } catch (error) {
+        commit(SET_ERROR, error);
+        commit(SET_LOADING, false);
+      }
+    }
   }
 };

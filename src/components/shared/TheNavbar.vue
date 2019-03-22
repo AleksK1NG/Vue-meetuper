@@ -17,7 +17,7 @@
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div id="navbarBasicExample" class="navbar-menu is-active">
       <div class="navbar-start">
         <router-link :to="'/'" class="navbar-item">
           Home
@@ -63,7 +63,7 @@
               Profile
             </a>
             <hr class="navbar-divider" />
-            <a class="navbar-item">
+            <a @click.prevent="logout" class="navbar-item">
               Logout
             </a>
           </div>
@@ -87,10 +87,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapGetters(['isAuthenticated', 'user'])
+  },
+  methods: {
+    ...mapActions(['logout'])
   }
 };
 </script>
