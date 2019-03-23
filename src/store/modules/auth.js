@@ -7,6 +7,7 @@ import {
 } from '../actionTypes';
 import router from '../../router';
 import { checkTokenValidity } from '../../helpers/checkTokenValidity';
+import axiosInstance from '../../services/axios';
 
 export default {
   namespace: true,
@@ -80,14 +81,14 @@ export default {
 
       const config = {
         headers: {
-          'Cache-Control': 'no-cache',
-          Authorization: `Bearer ${token}`
+          'Cache-Control': 'no-cache'
+          // Authorization: `Bearer ${token}`
         }
       };
 
       commit(SET_LOADING, true);
       try {
-        const { data } = await axios.get('/api/v1/users/me', config);
+        const { data } = await axiosInstance.get('/api/v1/users/me', config);
         commit(SET_USER, data);
         localStorage.setItem('meetuper-jwt', data.token);
         commit(SET_LOADING, false);
