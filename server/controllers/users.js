@@ -18,7 +18,11 @@ exports.getCurrentUser = function(req, res) {
     return res.sendStatus(422);
   }
 
-  return res.json(user);
+  // Only For Session Authentication
+  // return res.json(user);
+
+  // Return token
+  return res.json(user.toAuthJSON());
 };
 
 exports.register = function(req, res) {
@@ -84,13 +88,16 @@ exports.login = function(req, res, next) {
     }
 
     if (passportUser) {
-      req.login(passportUser, function(err) {
-        if (err) {
-          next(err);
-        }
+      // Only For Session Authentication
+      // req.login(passportUser, function(err) {
+      //   if (err) {
+      //     next(err);
+      //   }
+      //
+      //   return res.status(200).json(passportUser);
+      // });
 
-        return res.status(200).json(passportUser);
-      });
+      return res.status(200).json(passportUser.toAuthJSON());
     } else {
       return res.status(422).send({
         errors: {

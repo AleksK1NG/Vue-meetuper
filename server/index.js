@@ -5,17 +5,22 @@ const config = require('./config/dev');
 
 const session = require('express-session');
 const passport = require('passport');
-const MongoDBStore = require('connect-mongodb-session')(session);
 
+// const MongoDBStore = require('connect-mongodb-session')(session);
+
+
+/*
+* Only For Session Authentication
+* */
 /*
  * MongoDB sessions setup
  * */
-const store = new MongoDBStore({
-  uri: config.DB_URI,
-  collection: 'authSessions'
-});
+// const store = new MongoDBStore({
+//   uri: config.DB_URI,
+//   collection: 'authSessions'
+// });
 
-store.on('error', err => console.log(err));
+// store.on('error', err => console.log(err));
 
 
 /*
@@ -46,20 +51,26 @@ mongoose
 const app = express();
 
 app.use(bodyParser.json());
+
+
+/*
+* Only For Session Authentication
+* */
 /*
  * Session middlewares setup
  * */
-app.use(
-  session({
-    secret: config.SESSION_SECRET,
-    cookie: { maxAge: 3600000 },
-    resave: false,
-    saveUninitialized: false,
-    store
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(
+//   session({
+//     secret: config.SESSION_SECRET,
+//     cookie: { maxAge: 3600000 },
+//     resave: false,
+//     saveUninitialized: false,
+//     store
+//   })
+// );
+// app.use(passport.initialize());
+// app.use(passport.session());
+
 
 app.use('/api/v1/meetups', meetupsRoutes);
 app.use('/api/v1/users', usersRoutes);
