@@ -73,9 +73,15 @@ export default {
       const authUser = getters['user'];
       if (authUser) return Promise.resolve(authUser);
 
+      const config = {
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      };
+
       commit(SET_LOADING, true);
       try {
-        const { data } = await axios.get('/api/v1/users/me');
+        const { data } = await axios.get('/api/v1/users/me', config);
         commit(SET_USER, data);
         commit(SET_LOADING, false);
         commit(SET_IS_AUTH_RESOLVED, true);
