@@ -50,6 +50,8 @@ export default {
       try {
         const { data } = await axios.post('/api/v1/users/login', userData);
         commit(SET_USER, data);
+        localStorage.setItem('meetuper-jwt', data.token);
+        debugger;
         commit(SET_LOADING, false);
         router.push({ path: '/' });
       } catch (error) {
@@ -71,11 +73,14 @@ export default {
     },
     async getAuthUser({ commit, getters }) {
       const authUser = getters['user'];
+      const token = localStorage.getItem('meetuper-jwt');
+
       if (authUser) return Promise.resolve(authUser);
 
       const config = {
         headers: {
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache',
+          Authorization: `Bearer ${token}`
         }
       };
 
@@ -83,6 +88,7 @@ export default {
       try {
         const { data } = await axios.get('/api/v1/users/me', config);
         commit(SET_USER, data);
+        localStorage.setItem('meetuper-jwt', data.token);
         commit(SET_LOADING, false);
         commit(SET_IS_AUTH_RESOLVED, true);
       } catch (error) {
@@ -97,6 +103,7 @@ export default {
       try {
         await axios.post('/api/v1/users/logout');
         commit(SET_USER, null);
+        localStorage.removeItem('meetuper-jwt');
         commit(SET_LOADING, false);
       } catch (error) {
         commit(SET_ERROR, error);
