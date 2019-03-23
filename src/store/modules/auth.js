@@ -8,7 +8,7 @@ import {
 import router from '../../router';
 import { checkTokenValidity } from '../../helpers/checkTokenValidity';
 import axiosInstance from '../../services/axios';
-
+import { rejectError } from '../../helpers/rejectError';
 
 export default {
   namespace: true,
@@ -56,11 +56,11 @@ export default {
         localStorage.setItem('meetuper-jwt', data.token);
         commit(SET_LOADING, false);
         router.push({ path: '/' });
-        return Promise.resolve(data)
+        return Promise.resolve(data);
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
-        return Promise.reject(error)
+        return rejectError(error);
       }
     },
     async registerUser({ commit }, userData) {
@@ -70,11 +70,11 @@ export default {
         commit(SET_USER, data);
         commit(SET_LOADING, false);
         router.push({ path: '/' });
-        return Promise.resolve(data)
+        return Promise.resolve(data);
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
-        return Promise.reject(error)
+        return rejectError(error);
       }
     },
     async getAuthUser({ commit, getters }) {

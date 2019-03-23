@@ -202,8 +202,8 @@ export default {
             position: 'top-center'
           });
         })
-        .catch(() => {
-          this.$toasted.error('Error, some one wrong field', {
+        .catch((errorMessage) => {
+          this.$toasted.error(errorMessage || 'Error :(', {
             duration: 5000,
             position: 'top-center'
           });

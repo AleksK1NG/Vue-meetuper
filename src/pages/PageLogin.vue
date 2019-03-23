@@ -108,8 +108,8 @@ export default {
             position: 'top-center'
           });
         })
-        .catch((error) => {
-          this.$toasted.error(error.response.data.errors.message, {
+        .catch((errorMessage) => {
+          this.$toasted.error(errorMessage, {
             duration: 5000,
             position: 'top-center'
           });
