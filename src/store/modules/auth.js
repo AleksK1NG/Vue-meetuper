@@ -26,7 +26,7 @@ export default {
       return state.loading;
     },
     isAuthResolved(state) {
-      return state.isAuthResolved
+      return state.isAuthResolved;
     }
   },
   mutations: {
@@ -69,7 +69,10 @@ export default {
         commit(SET_LOADING, false);
       }
     },
-    async getAuthUser({ commit }) {
+    async getAuthUser({ commit, getters }) {
+      const authUser = getters['user'];
+      if (authUser) return Promise.resolve(authUser);
+
       commit(SET_LOADING, true);
       try {
         const { data } = await axios.get('/api/v1/users/me');

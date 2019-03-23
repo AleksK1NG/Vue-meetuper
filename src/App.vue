@@ -24,9 +24,6 @@ export default {
   computed: {
     ...mapGetters(['isAuthResolved'])
   },
-  created() {
-    this.$store.dispatch('getAuthUser');
-  }
 };
 </script>
 
