@@ -6,6 +6,7 @@ import {
   SET_USER
 } from '../actionTypes';
 import router from '../../router';
+import { checkTokenValidity } from '../../helpers/checkTokenValidity';
 
 export default {
   namespace: true,
@@ -51,7 +52,6 @@ export default {
         const { data } = await axios.post('/api/v1/users/login', userData);
         commit(SET_USER, data);
         localStorage.setItem('meetuper-jwt', data.token);
-        debugger;
         commit(SET_LOADING, false);
         router.push({ path: '/' });
       } catch (error) {
@@ -74,8 +74,9 @@ export default {
     async getAuthUser({ commit, getters }) {
       const authUser = getters['user'];
       const token = localStorage.getItem('meetuper-jwt');
+      const isTokenValid = checkTokenValidity(token);
 
-      if (authUser) return Promise.resolve(authUser);
+      if (authUser && isTokenValid) return Promise.resolve(authUser);
 
       const config = {
         headers: {
