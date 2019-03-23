@@ -194,7 +194,20 @@ export default {
   methods: {
     register() {
       this.$v.form.$touch();
-      this.$store.dispatch('registerUser', this.form);
+      this.$store
+        .dispatch('registerUser', this.form)
+        .then(() => {
+          this.$toasted.success('Success Register :)', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        })
+        .catch(() => {
+          this.$toasted.error('Error, some one wrong field', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        });
     }
   }
 };

@@ -9,7 +9,10 @@ import AppHero from './components/shared/AppHero';
 import moment from 'moment';
 import AppSpinner from './components/shared/AppSpinner';
 import Vuelidate from 'vuelidate';
+import Toasted from 'vue-toasted';
+
 Vue.use(Vuelidate);
+Vue.use(Toasted);
 
 Vue.config.productionTip = false;
 

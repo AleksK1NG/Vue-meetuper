@@ -100,10 +100,22 @@ export default {
   methods: {
     login() {
       this.$v.form.$touch();
-      this.$store.dispatch('loginWithEmailAndPassword', this.form);
+      this.$store
+        .dispatch('loginWithEmailAndPassword', this.form)
+        .then(() => {
+          this.$toasted.success('Success login :)', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        })
+        .catch((error) => {
+          this.$toasted.error(error.response.data.errors.message, {
+            duration: 5000,
+            position: 'top-center'
+          });
+        });
     }
-  },
-
+  }
 };
 </script>
 
