@@ -6,6 +6,7 @@
       <a>(change location)</a>
       <input
         @input="emitFormData"
+        @blur="$v.form.location.$touch()"
         v-model="form.location"
         type="text"
         class="input"
@@ -32,7 +33,7 @@ export default {
   },
   validations: {
     form: {
-      location: required
+      location: {required}
     }
   },
   methods: {
