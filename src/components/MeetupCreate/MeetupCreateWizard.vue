@@ -33,10 +33,8 @@
         Next
       </button>
       <!-- Confirm Data -->
-      <button v-else class="button is-primary">Confirm</button>
+      <button v-else class="button is-primary" @click="emitMeetupConfirm">Confirm</button>
     </div>
-    <!-- Just To See Data in the Form -->
-    <pre><code>{{form}}</code></pre>
   </div>
 </template>
 
@@ -109,6 +107,9 @@ export default {
     mergeStepData(step) {
       this.form = { ...this.form, ...step.data };
       this.canProceed = step.isValid;
+    },
+    emitMeetupConfirm() {
+      this.$emit('meetupConfirmed', this.form)
     }
   }
 };

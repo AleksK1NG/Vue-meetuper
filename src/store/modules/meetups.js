@@ -64,6 +64,19 @@ export default {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
       }
-    }
+    },
+    async createMeetup({ commit }, meetup) {
+      console.log('Create Meetup Action => ', meetup);
+      // commit(SET_MEETUP, {});
+      // commit(SET_LOADING, true);
+      // try {
+      //   const { data } = await axios.post(`/api/v1/meetups/`, meetup);
+      //   commit(SET_MEETUP, data);
+      //   commit(SET_LOADING, false);
+      // } catch (error) {
+      //   commit(SET_ERROR, error);
+      //   commit(SET_LOADING, false);
+      // }
+    },
   }
 };
