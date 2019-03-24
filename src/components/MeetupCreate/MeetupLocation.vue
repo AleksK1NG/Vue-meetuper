@@ -33,12 +33,12 @@ export default {
   },
   validations: {
     form: {
-      location: {required}
+      location: { required }
     }
   },
   methods: {
     emitFormData() {
-      this.$emit('stepUpdated', this.form);
+      this.$emit('stepUpdated', { data: this.form, isValid: !this.$v.$invalid });
     }
   }
 };

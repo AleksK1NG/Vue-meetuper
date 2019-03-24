@@ -5,11 +5,20 @@
     </div>
     <!-- Form Steps -->
     <keep-alive>
-      <MeetupLocation v-if="currentStep === 1" @stepUpdated="mergeStepData" />
-      <MeetupDetail v-if="currentStep === 2" @stepUpdated="mergeStepData" />
+      <MeetupLocation
+        v-if="currentStep === 1"
+        @stepUpdated="mergeStepData"
+        ref="currentComponent"
+      />
+      <MeetupDetail
+        v-if="currentStep === 2"
+        @stepUpdated="mergeStepData"
+        ref="currentComponent"
+      />
       <MeetupDescription
         v-if="currentStep === 3"
         @stepUpdated="mergeStepData"
+        ref="currentComponent"
       />
       <MeetupConfirmation v-if="currentStep === 4" :meetupToCreate="form" />
     </keep-alive>
@@ -29,6 +38,7 @@
         v-if="currentStep !== allStepsCount"
         class="button is-primary"
         @click="moveToNextStep"
+        :disabled="!canProceed"
       >
         Next
       </button>
@@ -67,7 +77,8 @@ export default {
         timeFrom: null
       },
       currentStep: 1,
-      allStepsCount: 4
+      allStepsCount: 4,
+      canProceed: false
     };
   },
   computed: {
@@ -80,14 +91,22 @@ export default {
       if (this.currentStep < 4) {
         this.currentStep++;
       }
+      // Fix allowed next with empty fields
+      // https://vuejs.org/v2/api/#Vue-nextTick
+      // Defer the callback to be executed after the next DOM update cycle.
+      this.$nextTick(() => {
+        this.canProceed = !this.$refs['currentComponent'].$v.$invalid;
+      });
     },
     moveToPrevStep() {
       if (this.currentStep > 1) {
         this.currentStep--;
       }
+      this.canProceed = true;
     },
-    mergeStepData(stepData) {
-      this.form = { ...this.form, ...stepData };
+    mergeStepData(step) {
+      this.form = { ...this.form, ...step.data };
+      this.canProceed = step.isValid;
     }
   }
 };
