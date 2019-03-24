@@ -1,18 +1,20 @@
 <template>
   <div class="meetup-create-form">
     <div class="current-step is-pulled-right">
-      1 of 4
+      {{ currentStep }} of {{ allStepsCount }}
     </div>
     <!-- Form Steps -->
-    <MeetupLocation />
-    <MeetupDetail />
-    <MeetupDescription />
-    <MeetupConfirmation />
+    <MeetupLocation v-if="currentStep === 1" />
+    <MeetupDetail v-if="currentStep === 2" />
+    <MeetupDescription v-if="currentStep === 3" />
+    <MeetupConfirmation v-if="currentStep === 4" />
 
     <progress class="progress" :value="100" max="100">100%</progress>
     <div class="controll-btns m-b-md">
-      <button class="button is-primary m-r-sm">Back</button>
-      <button class="button is-primary">Next</button>
+      <button class="button is-primary m-r-sm" @click="moveToPrevStep">
+        Back
+      </button>
+      <button class="button is-primary" @click="moveToNextStep">Next</button>
       <!-- Confirm Data -->
       <!-- <button v-else
               class="button is-primary">Confirm</button> -->
@@ -47,8 +49,22 @@ export default {
         description: null,
         timeTo: null,
         timeFrom: null
-      }
+      },
+      currentStep: 1,
+      allStepsCount: 4
     };
+  },
+  methods: {
+    moveToNextStep() {
+      if (this.currentStep < 4) {
+        this.currentStep++;
+      }
+    },
+    moveToPrevStep() {
+      if (this.currentStep > 1) {
+        this.currentStep--;
+      }
+    }
   }
 };
 </script>

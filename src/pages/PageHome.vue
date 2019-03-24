@@ -6,9 +6,13 @@
         <div class="m-b-lg">
           <h1 class="title is-inline">Featured Meetups in "Location"</h1>
           <AppDropdown />
-          <button class="button is-primary is-pulled-right m-r-sm">
+          <router-link
+            v-if="user"
+            :to="{ name: 'PageMeetupCreate' }"
+            class="button is-primary is-pulled-right m-r-sm"
+          >
             Create Meetups
-          </button>
+          </router-link>
           <router-link
             :to="{ name: 'PageMeetupFind' }"
             class="button is-primary is-pulled-right m-r-sm"
@@ -63,7 +67,8 @@ export default {
       'meetups',
       'categories',
       'categoriesLoading',
-      'threadsLoding'
+      'threadsLoding',
+      'user'
     ]),
     loading() {
       return this.categoriesLoading && this.threadsLoding;
