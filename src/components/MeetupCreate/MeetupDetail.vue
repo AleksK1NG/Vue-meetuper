@@ -31,22 +31,16 @@
     </div>
     <div class="field">
       <label class="title m-b-sm">From</label>
-      <input
-        v-model="form.timeFrom"
-        @blur="$v.form.timeFrom.$touch()"
-        class="input"
-        type="text"
-        placeholder="Time From"
+      <VueTimepicker
+        @change="changeTime($event, 'timeFrom')"
+        :minute-interval="10"
       />
     </div>
     <div class="field">
       <label class="title m-b-sm">To</label>
-      <input
-        v-model="form.timeTo"
-        @blur="$v.form.timeTo.$touch()"
-        class="input"
-        type="text"
-        placeholder="Time to"
+      <VueTimepicker
+        @change="changeTime($event, 'timeTo')"
+        :minute-interval="10"
       />
     </div>
     <div class="field">
@@ -80,11 +74,13 @@
 import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 import Datepicker from 'vuejs-datepicker';
+import VueTimepicker from 'vue2-timepicker';
 import moment from 'moment';
 export default {
   name: 'MeetupDetail',
   components: {
-    Datepicker
+    Datepicker,
+    VueTimepicker
   },
   data() {
     return {
@@ -126,6 +122,14 @@ export default {
     },
     setDate(date) {
       this.form.startDate = moment(date).format();
+      this.emitFormData();
+    },
+    changeTime({ data }, field) {
+      // Fix of empty fields
+      const minutes = data.mm || '00';
+      const hours = data.HH || '00';
+
+      this.form[field] = hours + ':' + minutes;
       this.emitFormData();
     }
   }
