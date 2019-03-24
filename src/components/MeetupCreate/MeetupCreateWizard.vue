@@ -5,22 +5,12 @@
     </div>
     <!-- Form Steps -->
     <keep-alive>
-      <MeetupLocation
-        v-if="currentStep === 1"
+      <component
+        :is="currentComponent"
         @stepUpdated="mergeStepData"
         ref="currentComponent"
+        :meetupToCreate="form"
       />
-      <MeetupDetail
-        v-if="currentStep === 2"
-        @stepUpdated="mergeStepData"
-        ref="currentComponent"
-      />
-      <MeetupDescription
-        v-if="currentStep === 3"
-        @stepUpdated="mergeStepData"
-        ref="currentComponent"
-      />
-      <MeetupConfirmation v-if="currentStep === 4" :meetupToCreate="form" />
     </keep-alive>
 
     <progress class="progress" :value="currentProgress" max="100"
@@ -35,7 +25,7 @@
         Back
       </button>
       <button
-        v-if="currentStep !== allStepsCount"
+        v-if="currentStep !== allFormStepsCount"
         class="button is-primary"
         @click="moveToNextStep"
         :disabled="!canProceed"
@@ -78,12 +68,24 @@ export default {
       },
       currentStep: 1,
       allStepsCount: 4,
-      canProceed: false
+      canProceed: false,
+      formSteps: [
+        'MeetupLocation',
+        'MeetupDetail',
+        'MeetupDescription',
+        'MeetupConfirmation'
+      ]
     };
   },
   computed: {
     currentProgress() {
       return (100 / this.allStepsCount) * this.currentStep;
+    },
+    allFormStepsCount() {
+      return this.formSteps.length;
+    },
+    currentComponent() {
+      return this.formSteps[this.currentStep - 1];
     }
   },
   methods: {
@@ -91,7 +93,7 @@ export default {
       if (this.currentStep < 4) {
         this.currentStep++;
       }
-      // Fix allowed next with empty fields
+      // Fix allowed next with empty fields, alternative way of use created(){}
       // https://vuejs.org/v2/api/#Vue-nextTick
       // Defer the callback to be executed after the next DOM update cycle.
       this.$nextTick(() => {
