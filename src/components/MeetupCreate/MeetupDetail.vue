@@ -50,12 +50,14 @@
       <label class="title m-b-sm">Please Choose the Category.</label>
       <div class="m-b-lg">
         <div class="select">
-          <!-- TODO: Get Here Categories -->
-          <!-- <select v-model="form.category">
-            <option v-for="category of categories"
-                    :value="category"
-                    :key="category.id">{{category.name}}</option>
-          </select> -->
+          <select v-model="form.category">
+            <option
+              v-for="category of categories"
+              :value="category"
+              :key="category.id"
+              >{{ category.name }}</option
+            >
+          </select>
         </div>
         <div v-if="$v.form.category.$error">
           <span v-if="!$v.form.category.required" class="help is-danger"
@@ -68,6 +70,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 export default {
   name: 'MeetupDetail',
@@ -90,6 +93,9 @@ export default {
       timeTo: { required },
       timeFrom: { required }
     }
+  },
+  computed: {
+    ...mapGetters(['categories'])
   }
 };
 </script>
