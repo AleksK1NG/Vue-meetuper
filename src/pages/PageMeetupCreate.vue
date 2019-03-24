@@ -29,7 +29,20 @@ export default {
   },
   methods: {
     createMeetup(meetupToCreate) {
-      this.$store.dispatch('createMeetup', meetupToCreate);
+      this.$store
+        .dispatch('createMeetup', meetupToCreate)
+        .then(() => {
+          this.$toasted.success('Success :)', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        })
+        .catch(() => {
+          this.$toasted.error('Error :(', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        });
     }
   }
 };

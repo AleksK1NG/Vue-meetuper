@@ -5,6 +5,8 @@ import {
   SET_MEETUPS
 } from '../actionTypes';
 import axios from 'axios';
+import router from '../../router';
+import axiosInstance from '../../services/axios';
 
 export default {
   namespace: true,
@@ -23,7 +25,7 @@ export default {
       return state.meetup;
     },
     meetupsLoading(state) {
-      return state.loading
+      return state.loading;
     }
   },
   mutations: {
@@ -65,18 +67,31 @@ export default {
         commit(SET_LOADING, false);
       }
     },
-    async createMeetup({ commit }, meetup) {
-      console.log('Create Meetup Action => ', meetup);
-      // commit(SET_MEETUP, {});
-      // commit(SET_LOADING, true);
-      // try {
-      //   const { data } = await axios.post(`/api/v1/meetups/`, meetup);
-      //   commit(SET_MEETUP, data);
-      //   commit(SET_LOADING, false);
-      // } catch (error) {
-      //   commit(SET_ERROR, error);
-      //   commit(SET_LOADING, false);
-      // }
-    },
+    async createMeetup({ commit, rootState }, meetupToCreate) {
+      // Add Creator
+      meetupToCreate.meetupCreator = rootState.auth.user;
+      // Add Location
+      meetupToCreate.processedLocation = meetupToCreate.location
+        .toLowerCase()
+        .replace(/[\s,]+/g, '')
+        .trim();
+
+      commit(SET_MEETUP, {});
+      commit(SET_LOADING, true);
+      try {
+        const { data } = await axiosInstance.post(
+          `/api/v1/meetups`,
+          meetupToCreate
+        );
+        commit(SET_MEETUP, data);
+        commit(SET_LOADING, false);
+        router.push({ path: `/meetups/${data._id}` });
+        return Promise.resolve(data);
+      } catch (error) {
+        commit(SET_ERROR, error);
+        commit(SET_LOADING, false);
+        return Promise.reject(error);
+      }
+    }
   }
 };
