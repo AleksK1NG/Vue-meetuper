@@ -30,6 +30,19 @@ export default {
     },
     isAuthResolved(state) {
       return state.isAuthResolved;
+    },
+    // cb for get second param from outside
+    isMeetupOwner: state => meetupCreatorId => {
+      if (!state.user) return false;
+
+      return state.user._id === meetupCreatorId;
+    },
+    isMember: state => meetupId => {
+      return (
+        state.user &&
+        state.user.joinedMeetups &&
+        state.user.joinedMeetups.includes(meetupId)
+      );
     }
   },
   mutations: {

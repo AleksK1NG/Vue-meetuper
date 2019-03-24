@@ -162,9 +162,24 @@ export default {
   name: 'PageMeetupDetail',
 
   computed: {
-    ...mapGetters(['meetup', 'threads']),
+    ...mapGetters([
+      'meetup',
+      'threads',
+      'isAuthenticated',
+      'isMeetupOwner',
+      'isMember'
+    ]),
     meetupCrearor() {
       return this.meetup.meetupCreator || {};
+    },
+    isMeetupOwner() {
+      return this.$store.getters['isMeetupOwner'](this.meetupCrearor._id);
+    },
+    isMember() {
+      return this.$store.getters['isMember'](this.meetup._id);
+    },
+    canJoin() {
+      return !this.isMeetupOwner && this.isAuthenticated && !this.isMember;
     }
   },
   created() {
