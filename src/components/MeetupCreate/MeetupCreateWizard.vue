@@ -4,9 +4,9 @@
       {{ currentStep }} of {{ allStepsCount }}
     </div>
     <!-- Form Steps -->
-    <MeetupLocation v-if="currentStep === 1" />
-    <MeetupDetail v-if="currentStep === 2" />
-    <MeetupDescription v-if="currentStep === 3" />
+    <MeetupLocation v-if="currentStep === 1" @stepUpdated="mergeStepData" />
+    <MeetupDetail v-if="currentStep === 2" @stepUpdated="mergeStepData" />
+    <MeetupDescription v-if="currentStep === 3" @stepUpdated="mergeStepData" />
     <MeetupConfirmation v-if="currentStep === 4" />
 
     <progress class="progress" :value="currentProgress" max="100"
@@ -80,6 +80,9 @@ export default {
       if (this.currentStep > 1) {
         this.currentStep--;
       }
+    },
+    mergeStepData(stepData) {
+      this.form = { ...this.form, ...stepData };
     }
   }
 };

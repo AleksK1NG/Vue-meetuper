@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form @input="emitFormData">
     <div class="field">
       <label class="title m-b-sm">Choose Title</label>
       <input
@@ -17,7 +17,7 @@
     <div class="field">
       <label class="title m-b-sm">Starts At</label>
       <input
-        v-model="form.startsAt"
+        v-model="form.startDate"
         class="input"
         type="text"
         placeholder="Starts At"
@@ -50,7 +50,7 @@
       <label class="title m-b-sm">Please Choose the Category.</label>
       <div class="m-b-lg">
         <div class="select">
-          <select v-model="form.category">
+          <select v-model="form.category" @change="emitFormData">
             <option
               v-for="category of categories"
               :value="category"
@@ -96,6 +96,11 @@ export default {
   },
   computed: {
     ...mapGetters(['categories'])
+  },
+  methods: {
+    emitFormData() {
+      this.$emit('stepUpdated', this.form);
+    }
   }
 };
 </script>
