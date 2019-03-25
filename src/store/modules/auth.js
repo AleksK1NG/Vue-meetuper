@@ -3,12 +3,14 @@ import {
   SET_ERROR,
   SET_IS_AUTH_RESOLVED,
   SET_LOADING,
+  SET_MEETUP_TO_AUTH_USER,
   SET_USER
 } from '../actionTypes';
 import router from '../../router';
 import { checkTokenValidity } from '../../helpers/checkTokenValidity';
 import axiosInstance from '../../services/axios';
 import { rejectError } from '../../helpers/rejectError';
+import Vue from 'vue';
 
 export default {
   namespace: true,
@@ -57,6 +59,9 @@ export default {
     },
     [SET_IS_AUTH_RESOLVED](state, payload) {
       return (state.isAuthResolved = payload);
+    },
+    [SET_MEETUP_TO_AUTH_USER](state, meetups) {
+      return Vue.set(state.user, 'joinedMeetups', meetups);
     }
   },
   actions: {
@@ -129,6 +134,26 @@ export default {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
       }
+    },
+    async addMeetupToAuthUser({ commit, state }, meetupId) {
+      // new user meetups
+      const userMeetups = [...state.user.joinedMeetups, meetupId];
+      debugger
+      commit(SET_MEETUP_TO_AUTH_USER, userMeetups);
+
+      // commit(SET_LOADING, true);
+      // try {
+      //   const { data } = await axios.post('/api/v1/users/login', userData);
+      //   commit(SET_USER, data);
+      //   localStorage.setItem('meetuper-jwt', data.token);
+      //   commit(SET_LOADING, false);
+      //   router.push({ path: '/' });
+      //   return Promise.resolve(data);
+      // } catch (error) {
+      //   commit(SET_ERROR, error);
+      //   commit(SET_LOADING, false);
+      //   return rejectError(error);
+      // }
     }
   }
 };

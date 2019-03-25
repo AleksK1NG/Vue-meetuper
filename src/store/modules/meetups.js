@@ -1,4 +1,5 @@
 import {
+  ADD_USER_TO_MEETUP,
   SET_ERROR,
   SET_LOADING,
   SET_MEETUP,
@@ -7,6 +8,7 @@ import {
 import axios from 'axios';
 import router from '../../router';
 import axiosInstance from '../../services/axios';
+import Vue from 'vue';
 
 export default {
   namespace: true,
@@ -41,6 +43,9 @@ export default {
     },
     [SET_LOADING](state, payload) {
       state.loading = payload;
+    },
+    [ADD_USER_TO_MEETUP](state, joinedPeople) {
+      Vue.set(state.meetup, 'joinedPeople', joinedPeople);
     }
   },
   actions: {
@@ -86,6 +91,29 @@ export default {
         commit(SET_MEETUP, data);
         commit(SET_LOADING, false);
         router.push({ path: `/meetups/${data._id}` });
+        return Promise.resolve(data);
+      } catch (error) {
+        commit(SET_ERROR, error);
+        commit(SET_LOADING, false);
+        return Promise.reject(error);
+      }
+    },
+    async joinMeetup({ commit, rootState, dispatch, state }, meetupId) {
+      const user = rootState.auth.user;
+
+      commit(SET_LOADING, true);
+      try {
+        const { data } = await axiosInstance.post(
+          `/api/v1/meetups/${meetupId}/join`,
+          user
+        );
+        dispatch('addMeetupToAuthUser', meetupId, { root: true });
+
+        const joinedPeople = state.meetup.joinedPeople;
+        commit(ADD_USER_TO_MEETUP, [...joinedPeople, user]);
+
+        // commit(SET_MEETUP, data);
+        commit(SET_LOADING, false);
         return Promise.resolve(data);
       } catch (error) {
         commit(SET_ERROR, error);

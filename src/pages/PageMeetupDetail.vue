@@ -94,7 +94,13 @@
                 {{ meetup.description }}
               </p>
               <!-- Join Meetup -->
-              <button v-if="canJoin" class="button is-primary">Join In</button>
+              <button
+                v-if="canJoin"
+                @click="joinMeetup"
+                class="button is-primary"
+              >
+                Join In
+              </button>
               <button
                 v-if="!isAuthenticated"
                 :disabled="true"
@@ -189,6 +195,12 @@ export default {
   created() {
     this.$store.dispatch('fetchMeetupById', this.$route.params.id);
     this.$store.dispatch('fetchThreads', this.$route.params.id);
+  },
+  methods: {
+    joinMeetup() {
+      console.log('Join Meetup');
+      this.$store.dispatch('joinMeetup', this.meetup._id);
+    }
   }
 };
 </script>
