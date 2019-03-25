@@ -32,12 +32,12 @@ export default {
       return state.isAuthResolved;
     },
     // cb for get second param from outside
-    isMeetupOwner: state => meetupCreatorId => {
+    isMeetupOwner: (state) => (meetupCreatorId) => {
       if (!state.user) return false;
 
       return state.user._id === meetupCreatorId;
     },
-    isMember: state => meetupId => {
+    isMember: (state) => (meetupId) => {
       return (
         state.user &&
         state.user.joinedMeetups &&

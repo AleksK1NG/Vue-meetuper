@@ -25,7 +25,7 @@
           </article>
         </div>
         <div class="is-pulled-right">
-          <button class="button is-danger">Leave Group</button>
+          <button v-if="isMember" class="button is-danger">Leave Meetup</button>
         </div>
       </div>
     </section>
@@ -94,10 +94,14 @@
                 {{ meetup.description }}
               </p>
               <!-- Join Meetup -->
-              <button class="button is-primary">Join In</button>
-              <!-- Not logged In  -->
-              <!-- <button :disabled="true"
-                      class="button is-warning">You need authenticate in order to join</button> -->
+              <button v-if="canJoin" class="button is-primary">Join In</button>
+              <button
+                v-if="!isAuthenticated"
+                :disabled="true"
+                class="button is-warning"
+              >
+                You need authenticate in order to join
+              </button>
             </div>
             <!-- Thread List START -->
             <div class="content is-medium">
