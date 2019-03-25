@@ -1,5 +1,5 @@
 import {
-  ADD_USER_TO_MEETUP,
+  ADD_USERS_TO_MEETUP,
   SET_ERROR,
   SET_LOADING,
   SET_MEETUP,
@@ -44,7 +44,7 @@ export default {
     [SET_LOADING](state, payload) {
       state.loading = payload;
     },
-    [ADD_USER_TO_MEETUP](state, joinedPeople) {
+    [ADD_USERS_TO_MEETUP](state, joinedPeople) {
       Vue.set(state.meetup, 'joinedPeople', joinedPeople);
     }
   },
@@ -110,9 +110,36 @@ export default {
         dispatch('addMeetupToAuthUser', meetupId, { root: true });
 
         const joinedPeople = state.meetup.joinedPeople;
-        commit(ADD_USER_TO_MEETUP, [...joinedPeople, user]);
+        commit(ADD_USERS_TO_MEETUP, [...joinedPeople, user]);
 
         // commit(SET_MEETUP, data);
+        commit(SET_LOADING, false);
+        return Promise.resolve(data);
+      } catch (error) {
+        commit(SET_ERROR, error);
+        commit(SET_LOADING, false);
+        return Promise.reject(error);
+      }
+    },
+    async leaveMeetup({ commit, rootState, dispatch, state }, meetupId) {
+      const user = rootState.auth.user;
+
+      commit(SET_LOADING, true);
+      try {
+        const { data } = await axiosInstance.post(
+          `/api/v1/meetups/${meetupId}/leave`,
+          user
+        );
+        dispatch('removeMeetupFromAuthUser', meetupId, { root: true });
+
+        const joinedPeople = state.meetup.joinedPeople;
+        const index = joinedPeople.findIndex(
+          (joinedUser) => joinedUser._id === user._id
+        );
+
+        joinedPeople.slice(index, 1);
+
+        commit(ADD_USERS_TO_MEETUP, joinedPeople);
         commit(SET_LOADING, false);
         return Promise.resolve(data);
       } catch (error) {

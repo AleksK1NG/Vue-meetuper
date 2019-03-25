@@ -138,22 +138,17 @@ export default {
     async addMeetupToAuthUser({ commit, state }, meetupId) {
       // new user meetups
       const userMeetups = [...state.user.joinedMeetups, meetupId];
-      debugger
       commit(SET_MEETUP_TO_AUTH_USER, userMeetups);
+    },
+    async removeMeetupFromAuthUser({ commit, state }, meetupId) {
+      const userMeetupsIds = [...state.user.joinedMeetups];
+      const index = userMeetupsIds.findIndex(
+        (userMeetupId) => userMeetupId === meetupId
+      );
 
-      // commit(SET_LOADING, true);
-      // try {
-      //   const { data } = await axios.post('/api/v1/users/login', userData);
-      //   commit(SET_USER, data);
-      //   localStorage.setItem('meetuper-jwt', data.token);
-      //   commit(SET_LOADING, false);
-      //   router.push({ path: '/' });
-      //   return Promise.resolve(data);
-      // } catch (error) {
-      //   commit(SET_ERROR, error);
-      //   commit(SET_LOADING, false);
-      //   return rejectError(error);
-      // }
+      userMeetupsIds.splice(index, 1);
+
+      commit(SET_MEETUP_TO_AUTH_USER, userMeetupsIds);
     }
   }
 };

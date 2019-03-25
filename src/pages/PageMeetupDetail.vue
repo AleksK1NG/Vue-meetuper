@@ -25,7 +25,9 @@
           </article>
         </div>
         <div class="is-pulled-right">
-          <button v-if="isMember" class="button is-danger">Leave Meetup</button>
+          <button v-if="isMember" @click="leaveMeetup" class="button is-danger">
+            Leave Meetup
+          </button>
         </div>
       </div>
     </section>
@@ -199,7 +201,36 @@ export default {
   methods: {
     joinMeetup() {
       console.log('Join Meetup');
-      this.$store.dispatch('joinMeetup', this.meetup._id);
+      this.$store
+        .dispatch('joinMeetup', this.meetup._id)
+        .then(() => {
+          this.$toasted.success('Success :)', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        })
+        .catch(() => {
+          this.$toasted.error('Error :(', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        });
+    },
+    leaveMeetup() {
+      this.$store
+        .dispatch('leaveMeetup', this.meetup._id)
+        .then(() => {
+          this.$toasted.success('Success :)', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        })
+        .catch(() => {
+          this.$toasted.error('Error :(', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        });
     }
   }
 };
