@@ -6,7 +6,7 @@ import {
 } from '../actionTypes';
 import axios from 'axios';
 import axiosInstance from '../../services/axios';
-import Vue from 'vue';
+// import Vue from 'vue';
 
 export default {
   namespace: true,
@@ -22,6 +22,12 @@ export default {
     },
     threadsLoding(state) {
       return state.loading;
+    },
+    orderedThreads(state) {
+      const copyThreads = [...state.threads];
+      return copyThreads.sort((thread, nextThread) => {
+        return new Date(nextThread.createdAt) - new Date(thread.createdAt);
+      });
     }
   },
   mutations: {
@@ -43,7 +49,7 @@ export default {
   },
   actions: {
     async fetchThreads({ commit }, meetupId) {
-      commit(SET_THREADS, {});
+      commit(SET_THREADS, []);
       commit(SET_LOADING, true);
       try {
         const { data } = await axios.get(

@@ -67,7 +67,7 @@
                 Threads
               </p>
               <ul>
-                <li v-for="thread in threads" :key="thread._id">
+                <li v-for="thread in orderedThreads" :key="thread._id">
                   {{ thread.title }}
                 </li>
               </ul>
@@ -120,7 +120,11 @@
             <!-- Thread List START -->
             <div class="content is-medium">
               <h3 class="title is-3">Threads</h3>
-              <div v-for="thread in threads" :key="thread._id" class="box">
+              <div
+                v-for="thread in orderedThreads"
+                :key="thread._id"
+                class="box"
+              >
                 <!-- Thread title -->
                 <h4 id="const" class="title is-3">
                   {{ thread.title }}
@@ -189,8 +193,10 @@ export default {
       'isAuthenticated',
       'isMeetupOwner',
       'isMember',
-      'user'
+      'user',
+      'orderedThreads'
     ]),
+
     meetupCrearor() {
       return this.meetup.meetupCreator || {};
     },
