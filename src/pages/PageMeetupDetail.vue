@@ -250,14 +250,15 @@ export default {
             duration: 5000,
             position: 'top-center'
           });
+          done();
         })
         .catch(() => {
           this.$toasted.error('Error :(', {
             duration: 5000,
             position: 'top-center'
           });
+          done();
         });
-      done();
     }
   }
 };
