@@ -169,7 +169,7 @@ module.exports = {
       _id: user1Id,
       avatar:
         'https://b.kisscc0.com/20180718/urw/kisscc0-ninja-computer-icons-samurai-youtube-avatar-ninja-5b4ed903c2dd20.4931332915318940197982.jpg',
-      email: 'alexander.bryksin@yandex.ru',
+      email: 'alexander@gmail.com',
       name: 'Alex Bryksin',
       info: 'Bla bla bla bla',
       createdAt: moment().toISOString(),
@@ -187,7 +187,7 @@ module.exports = {
       info: 'Bla bla bla bla',
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),
-      username: 'Petergreen',
+      username: 'Dan Abramov',
       password: 'testtest1',
       joinedMeetups: [meetup1Id]
     },
@@ -200,7 +200,7 @@ module.exports = {
       info: 'I have a famous name',
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),
-      username: 'Kevin21',
+      username: 'Mark Zuckerberg',
       password: 'testtest2',
       joinedMeetups: [meetup2Id, meetup3Id, meetup4Id, meetup5Id, meetup6Id]
     }

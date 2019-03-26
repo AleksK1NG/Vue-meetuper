@@ -47,6 +47,7 @@ export default {
             duration: 5000,
             position: 'top-center'
           });
+          this.text = '';
         })
         .catch(() => {
           this.$toasted.error('Error :(', {
