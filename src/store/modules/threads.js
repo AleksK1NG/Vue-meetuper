@@ -81,6 +81,25 @@ export default {
         commit(SET_LOADING, false);
         return Promise.reject(error);
       }
+    },
+    async sendPost({ commit, state, dispatch }, { text, threadId }) {
+      const post = { text, thread: threadId };
+      console.log(post);
+
+      commit(SET_LOADING, true);
+      try {
+        const { data } = await axiosInstance.post(
+          `/api/v1/posts`,
+          post
+        );
+        // commit(ADD_THREAD_TO_THREADS, createdThread);
+        commit(SET_LOADING, false);
+        return Promise.resolve(data);
+      } catch (error) {
+        commit(SET_ERROR, error);
+        commit(SET_LOADING, false);
+        return Promise.reject(error);
+      }
     }
     // Vue.set version
     // async postThreads({ commit, state }, { title, meetupId }) {
