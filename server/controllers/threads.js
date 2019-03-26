@@ -1,5 +1,7 @@
 const Thread = require('../models/threads');
-
+/*
+ * GET Threads
+ * */
 exports.getThreads = function(req, res) {
   const meetupId = req.query.meetupId;
 
@@ -17,4 +19,21 @@ exports.getThreads = function(req, res) {
 
       return res.json(threads);
     });
+};
+
+/*
+ * POST Create Thread
+ * */
+exports.createThread = function(req, res) {
+  const threadData = req.body;
+  const thread = new Thread(threadData);
+  thread.user = req.user;
+
+  thread.save((errors, createdThread) => {
+    if (errors) {
+      return res.status(422).send({ errors });
+    }
+
+    return res.status(200).json(createdThread);
+  });
 };

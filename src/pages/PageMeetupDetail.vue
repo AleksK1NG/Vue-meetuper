@@ -243,7 +243,20 @@ export default {
         });
     },
     createThread({ title, done }) {
-      console.log(title);
+      this.$store
+        .dispatch('postThreads', { title, meetupId: this.meetup._id })
+        .then(() => {
+          this.$toasted.success('Success :)', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        })
+        .catch(() => {
+          this.$toasted.error('Error :(', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        });
       done();
     }
   }

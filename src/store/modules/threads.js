@@ -1,5 +1,6 @@
 import { SET_ERROR, SET_LOADING, SET_THREADS } from '../actionTypes';
 import axios from 'axios';
+import axiosInstance from '../../services/axios';
 
 export default {
   namespace: true,
@@ -42,6 +43,21 @@ export default {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
       }
+    },
+    async postThreads({ commit, state }, { title, meetupId }) {
+      console.log('postThread => ', title, meetupId);
+      // commit(SET_THREADS, {});
+      // commit(SET_LOADING, true);
+      // try {
+      //   const { data } = await axiosInstance.post(
+      //     `/api/v1/threads?meetupId=${meetupId}`
+      //   );
+      //   commit(SET_THREADS, data);
+      //   commit(SET_LOADING, false);
+      // } catch (error) {
+      //   commit(SET_ERROR, error);
+      //   commit(SET_LOADING, false);
+      // }
     }
   }
 };
