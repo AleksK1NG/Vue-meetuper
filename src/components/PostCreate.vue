@@ -42,11 +42,12 @@ export default {
           text: this.text,
           threadId: this.threadId
         })
-        .then(() => {
+        .then((createdPost) => {
           this.$toasted.success('Success :)', {
             duration: 5000,
             position: 'top-center'
           });
+          this.$root.socket.emit('meetup/postSave', createdPost);
           this.text = '';
         })
         .catch(() => {

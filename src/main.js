@@ -15,9 +15,9 @@ import Toasted from 'vue-toasted';
 Vue.use(Vuelidate);
 Vue.use(Toasted);
 /*
-* Socket.io init
-* */
-io('http://localhost:3001');
+ * Socket.io init
+ * */
+const socket = io('http://localhost:3001');
 
 Vue.config.productionTip = false;
 
@@ -46,6 +46,11 @@ Vue.filter('formatDate', (value, formatType = 'LL') => {
 });
 
 new Vue({
+  data() {
+    return {
+      socket
+    };
+  },
   router,
   store,
   Vuelidate,
