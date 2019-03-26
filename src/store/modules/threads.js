@@ -1,12 +1,13 @@
 import {
   ADD_THREAD_TO_THREADS,
+  SAVE_POST_TO_THREAD,
   SET_ERROR,
   SET_LOADING,
   SET_THREADS
 } from '../actionTypes';
 import axios from 'axios';
 import axiosInstance from '../../services/axios';
-// import Vue from 'vue';
+import Vue from 'vue';
 
 export default {
   namespace: true,
@@ -45,6 +46,9 @@ export default {
     // }
     [ADD_THREAD_TO_THREADS](state, payload) {
       state.threads.push(payload);
+    },
+    [SAVE_POST_TO_THREAD](state, { posts, index }) {
+      Vue.set(state.threads[index], 'posts', posts);
     }
   },
   actions: {
@@ -82,23 +86,34 @@ export default {
         return Promise.reject(error);
       }
     },
-    async sendPost({ commit, state, dispatch }, { text, threadId }) {
+    async sendPost({ commit, dispatch }, { text, threadId }) {
       const post = { text, thread: threadId };
-      console.log(post);
 
       commit(SET_LOADING, true);
       try {
-        const { data } = await axiosInstance.post(
+        const { data: createdPost } = await axiosInstance.post(
           `/api/v1/posts`,
           post
         );
-        // commit(ADD_THREAD_TO_THREADS, createdThread);
+        dispatch('addPostToThread', { post: createdPost, threadId });
         commit(SET_LOADING, false);
-        return Promise.resolve(data);
+        return Promise.resolve(createdPost);
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
         return Promise.reject(error);
+      }
+    },
+    // senPost action helper
+    addPostToThread({ commit, state }, { post, threadId }) {
+      const threadIndex = state.threads.findIndex(
+        (thread) => thread._id === threadId
+      );
+
+      if (threadIndex > -1) {
+        const posts = state.threads[threadIndex].posts;
+        posts.unshift(post);
+        commit(SAVE_POST_TO_THREAD, { posts, index: threadIndex });
       }
     }
     // Vue.set version

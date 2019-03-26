@@ -5,7 +5,7 @@ const postSchema = new Schema({
   text: {
     type: String,
     required: true,
-    minlength: [512, 'Too long, max is 512 characters']
+    maxlength: [512, 'Too long, max is 512 characters']
   },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
