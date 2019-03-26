@@ -45,7 +45,7 @@ module.exports = {
       startDate: moment()
         .add(2, 'days')
         .toISOString(),
-      timeFrom: '14:00',
+      timeFrom: '12:00',
       timeTo: '18:00',
       joinedPeopleCount: 1,
       status: 'active',
@@ -174,7 +174,7 @@ module.exports = {
       info: 'Bla bla bla bla',
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),
-      username: 'Rhonyn99',
+      username: 'Alexander',
       password: 'testtest',
       joinedMeetups: [meetup2Id, meetup3Id, meetup4Id, meetup5Id, meetup6Id]
     },
@@ -182,8 +182,8 @@ module.exports = {
       _id: user2Id,
       avatar:
         'https://www.clipartmax.com/png/middle/195-1956720_%5B-img%5D-avatar.png',
-      email: 'peter@gmail.com',
-      name: 'Peter Green',
+      email: 'danabramov@gmail.com',
+      name: 'Dan Abramov',
       info: 'Bla bla bla bla',
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),
@@ -195,8 +195,8 @@ module.exports = {
       _id: user3Id,
       avatar:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuqyc3j2s3bL4DIkC8uC9h0rcAdsDXcwJPNh8XHWbLQfHbOpVU',
-      email: 'kevin@gmail.com',
-      name: 'Kevin Rock',
+      email: 'mark@gmail.com',
+      name: 'Mark Zuckerberg',
       info: 'I have a famous name',
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),

@@ -110,6 +110,12 @@
               >
                 You need authenticate in order to join
               </button>
+              <ThreadCreateModal
+                @threadSubmitted="createThread"
+                :btnTitle="`Welcome ${user.username}, Start a new Thread`"
+                :title="'Create Thread'"
+                v-if="isMember || isMeetupOwner"
+              />
             </div>
             <!-- Thread List START -->
             <div class="content is-medium">
@@ -170,16 +176,20 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import ThreadCreateModal from '../components/ThreadCreateModal';
 export default {
   name: 'PageMeetupDetail',
-
+  components: {
+    ThreadCreateModal
+  },
   computed: {
     ...mapGetters([
       'meetup',
       'threads',
       'isAuthenticated',
       'isMeetupOwner',
-      'isMember'
+      'isMember',
+      'user'
     ]),
     meetupCrearor() {
       return this.meetup.meetupCreator || {};
@@ -231,6 +241,10 @@ export default {
             position: 'top-center'
           });
         });
+    },
+    createThread({ title, done }) {
+      console.log(title);
+      done();
     }
   }
 };
