@@ -8,10 +8,9 @@ const passport = require('passport');
 
 // const MongoDBStore = require('connect-mongodb-session')(session);
 
-
 /*
-* Only For Session Authentication
-* */
+ * Only For Session Authentication
+ * */
 /*
  * MongoDB sessions setup
  * */
@@ -22,10 +21,9 @@ const passport = require('passport');
 
 // store.on('error', err => console.log(err));
 
-
 /*
-* Models
-* */
+ * Models
+ * */
 require('./models/meetups');
 require('./models/users');
 require('./models/threads');
@@ -35,8 +33,8 @@ require('./models/categories');
 require('./services/passport');
 
 /*
-* Routes
-* */
+ * Routes
+ * */
 const meetupsRoutes = require('./routes/meetups');
 const usersRoutes = require('./routes/users');
 const threadsRoutes = require('./routes/threads');
@@ -46,16 +44,21 @@ const categoriesRoutes = require('./routes/categories');
 mongoose
   .connect(config.DB_URI, { useNewUrlParser: true })
   .then(() => console.log('DB Connected!'))
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, { pingTimeout: 60000 });
+
+io.on('connection', (socket) => {
+  console.log('Connection has been established');
+});
 
 app.use(bodyParser.json());
 
-
 /*
-* Only For Session Authentication
-* */
+ * Only For Session Authentication
+ * */
 /*
  * Session middlewares setup
  * */
@@ -71,7 +74,6 @@ app.use(bodyParser.json());
 // app.use(passport.initialize());
 // app.use(passport.session());
 
-
 app.use('/api/v1/meetups', meetupsRoutes);
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/posts', postsRoutes);
@@ -80,6 +82,6 @@ app.use('/api/v1/categories', categoriesRoutes);
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, function() {
+server.listen(PORT, function() {
   console.log('App is running on port: ' + PORT);
 });
