@@ -2,6 +2,7 @@
   <form class="post-create">
     <div class="field">
       <textarea
+        v-auto-expand
         class="textarea textarea-post"
         placeholder="Write a post"
         rows="1"
@@ -12,8 +13,10 @@
 </template>
 
 <script>
+import autoExpand from '../directives/autoExpand';
 export default {
-  name: 'PostCreate'
+  name: 'PostCreate',
+  directives: { autoExpand }
 };
 </script>
 
