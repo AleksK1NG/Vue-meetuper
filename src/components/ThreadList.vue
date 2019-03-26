@@ -2,22 +2,8 @@
   <div class="content is-medium">
     <h3 class="title is-3">Threads</h3>
     <div v-for="thread in threads" :key="thread._id" class="box">
-      <h4 id="const" class="title is-3">
-        {{ thread.title }}
-      </h4>
-
-      <form class="post-create">
-        <div class="field">
-          <textarea
-            class="textarea textarea-post"
-            placeholder="Write a post"
-            rows="1"
-          ></textarea>
-          <button :disabled="true" class="button is-primary m-t-sm">
-            Send
-          </button>
-        </div>
-      </form>
+      <h4 id="const" class="title is-3">{{ thread.title }}</h4>
+      <PostCreate v-if="canMakePost" />
       <!-- Posts START -->
       <article
         v-for="post in thread.posts"
@@ -32,8 +18,10 @@
         <div class="media-content">
           <div class="content is-medium">
             <div class="post-content">
-              <strong class="author">{{ post.username }}</strong>
+              <!-- Post User Name -->
+              <strong class="author">{{ post.user.name }}</strong>
               {{ ' ' }}
+              <!-- Post Updated at -->
               <small class="post-time">{{
                 post.updatedAt | formatDate('LLL')
               }}</small>
@@ -49,8 +37,12 @@
 </template>
 
 <script>
+import PostCreate from './PostCreate';
 export default {
   name: 'ThreadList',
+  components: {
+    PostCreate
+  },
   props: {
     threads: {
       type: Array,
