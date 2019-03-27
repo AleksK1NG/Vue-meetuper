@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import ThreadCreateModal from '../components/ThreadCreateModal';
 import ThreadList from '../components/ThreadList';
 export default {
@@ -168,12 +168,19 @@ export default {
     this.$store.dispatch('fetchMeetupById', this.$route.params.id);
     this.$store.dispatch('fetchThreads', this.$route.params.id);
 
-    this.$socket.on('meetup/postPublished', (post) => {
-      alert(post.text);
-      console.log('Socket post.text => ', post);
-    });
+    if (this.isAuthenticated) {
+      this.$socket.emit('meetup/subscribe', this.$route.params.id);
+      this.$socket.on('meetup/postPublished', (post) =>
+        this.addPostToThread({ post, threadId: post.thread })
+      );
+    }
+  },
+  destroyed() {
+    this.$socket.removeListener('meetup/postPublished', this.addPostToThread);
+    this.$socket.emit('meetup/unsubscribe');
   },
   methods: {
+    ...mapActions(['addPostToThread']),
     joinMeetup() {
       console.log('Join Meetup');
       this.$store

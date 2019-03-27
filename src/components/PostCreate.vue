@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import autoExpand from '../directives/autoExpand';
 export default {
   name: 'PostCreate',
@@ -35,6 +36,9 @@ export default {
       text: null
     };
   },
+  computed: {
+    ...mapGetters(['meetup'])
+  },
   methods: {
     sendPost() {
       this.$store
@@ -47,7 +51,10 @@ export default {
             duration: 5000,
             position: 'top-center'
           });
-          this.$socket.emit('meetup/postSave', createdPost);
+          this.$socket.emit('meetup/postSaved', {
+            ...createdPost,
+            meetup: this.meetup._id
+          });
           this.text = '';
         })
         .catch(() => {
