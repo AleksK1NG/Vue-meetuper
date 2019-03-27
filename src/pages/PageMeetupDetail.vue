@@ -170,17 +170,18 @@ export default {
 
     if (this.isAuthenticated) {
       this.$socket.emit('meetup/subscribe', this.$route.params.id);
-      this.$socket.on('meetup/postPublished', (post) =>
-        this.addPostToThread({ post, threadId: post.thread })
-      );
+      this.$socket.on('meetup/postPublished', this.addPostToThreadHandler);
     }
   },
   destroyed() {
-    this.$socket.removeListener('meetup/postPublished', this.addPostToThread);
-    this.$socket.emit('meetup/unsubscribe');
+    this.$socket.removeListener('meetup/postPublished', this.addPostToThreadHandler);
+    this.$socket.emit('meetup/unsubscribe', this.meetup._id);
   },
   methods: {
     ...mapActions(['addPostToThread']),
+    addPostToThreadHandler(post) {
+      this.addPostToThread({ post, threadId: post.thread });
+    },
     joinMeetup() {
       console.log('Join Meetup');
       this.$store
