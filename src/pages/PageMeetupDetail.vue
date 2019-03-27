@@ -168,7 +168,7 @@ export default {
     this.$store.dispatch('fetchMeetupById', this.$route.params.id);
     this.$store.dispatch('fetchThreads', this.$route.params.id);
 
-    this.$root.socket.on('meetup/postPublished', (post) => {
+    this.$socket.on('meetup/postPublished', (post) => {
       alert(post.text);
       console.log('Socket post.text => ', post);
     });

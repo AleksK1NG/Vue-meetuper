@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import io from 'socket.io-client';
+import AppSocket from './plugins/socket';
 
 import AppDropdown from './components/shared/AppDropdown';
 import AppHero from './components/shared/AppHero';
@@ -17,7 +17,7 @@ Vue.use(Toasted);
 /*
  * Socket.io init
  * */
-const socket = io('http://localhost:3001');
+Vue.use(AppSocket, { connection: 'http://localhost:3001' });
 
 Vue.config.productionTip = false;
 
@@ -46,11 +46,6 @@ Vue.filter('formatDate', (value, formatType = 'LL') => {
 });
 
 new Vue({
-  data() {
-    return {
-      socket
-    };
-  },
   router,
   store,
   Vuelidate,

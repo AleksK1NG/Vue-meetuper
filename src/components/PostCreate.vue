@@ -47,7 +47,7 @@ export default {
             duration: 5000,
             position: 'top-center'
           });
-          this.$root.socket.emit('meetup/postSave', createdPost);
+          this.$socket.emit('meetup/postSave', createdPost);
           this.text = '';
         })
         .catch(() => {
