@@ -19,7 +19,20 @@ export default {
     error: null,
     loadingStats: false
   },
-  getters: {},
+  getters: {
+    statsMeetups(state) {
+      return state.meetups;
+    },
+    statsThreads(state) {
+      return state.threads;
+    },
+    statsPosts(state) {
+      return state.posts;
+    },
+    statsLoading(state) {
+      return state.loadingStats;
+    }
+  },
   mutations: {
     [SET_STATS_STATE](state, { meetups, threads, posts }) {
       state.meetups = meetups;
@@ -41,7 +54,6 @@ export default {
           data: { meetups, threads, posts }
         } = await axiosInstance.get('/api/v1/users/me/activity');
         commit(SET_STATS_STATE, { meetups, threads, posts });
-        debugger;
         commit(SET_LOADING, false);
       } catch (error) {
         console.error(error);
