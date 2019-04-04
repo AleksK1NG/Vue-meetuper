@@ -130,6 +130,7 @@ export default {
         commit(SET_USER, null);
         localStorage.removeItem('meetuper-jwt');
         commit(SET_LOADING, false);
+        router.push({ path: '/' });
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
