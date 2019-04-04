@@ -5,6 +5,7 @@ import categories from './modules/categories';
 import threads from './modules/threads';
 import meetups from './modules/meetups';
 import auth from './modules/auth';
+import stats from './modules/stats';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     categories,
     threads,
     meetups,
-    auth
+    auth,
+    stats
   }
 });

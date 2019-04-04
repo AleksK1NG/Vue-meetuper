@@ -136,7 +136,10 @@
 
 <script>
 export default {
-  name: 'PageProfile'
+  name: 'PageProfile',
+  created() {
+    this.$store.dispatch('fetchUserStats');
+  }
 };
 </script>
 
