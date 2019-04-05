@@ -21,19 +21,19 @@
           <form>
             <div class="field">
               <label class="title">Name</label>
-              <input class="input" />
+              <input class="input" v-model="user.name" />
             </div>
             <div class="field">
               <label class="title">Username</label>
-              <input class="input" />
+              <input class="input" v-model="user.username" />
             </div>
             <div class="field">
               <label class="title">Avatar</label>
-              <input class="input" />
+              <input class="input" v-model="user.avatar" />
             </div>
             <div class="field">
               <label class="title">Info</label>
-              <input class="input" />
+              <input class="input" v-model="user.info" />
             </div>
           </form>
         </section>
@@ -49,9 +49,16 @@
 <script>
 export default {
   name: 'UserUpdateModal',
+  props: {
+    authUser: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
-      isOpen: false
+      isOpen: false,
+      user: { ...this.authUser }
     };
   }
 };

@@ -12,7 +12,7 @@
             <p>
               <span class="title is-bold">{{ user.name }}</span>
               <br />
-              <UserUpdateModal />
+              <UserUpdateModal :authUser="user" />
               <br />
             </p>
             <p class="tagline">
