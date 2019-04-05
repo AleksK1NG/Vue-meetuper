@@ -32,12 +32,11 @@
       >
         Next
       </button>
-      <!-- Confirm Data -->
+
       <button v-else class="button is-primary" @click="emitMeetupConfirm">
         Confirm
       </button>
     </div>
-    <pre><code>{{form}}</code></pre>
   </div>
 </template>
 

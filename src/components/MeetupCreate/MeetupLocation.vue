@@ -2,9 +2,17 @@
   <div>
     <h1 class="title m-b-sm">What's your new Meetup location?</h1>
     <div class="m-b-lg">
-      <span v-if="location" class="subtitle">{{ location }}</span>
-      <a v-if="location">(change location)</a>
+      <span v-if="location && !wantChangeLocation" class="subtitle">{{
+        location
+      }}</span>
+      <a @click="toggleLocation" v-if="location && !wantChangeLocation"
+        >(change location)</a
+      >
+      <a @click="toggleLocation" v-if="location && wantChangeLocation"
+        >(Set Default location)</a
+      >
       <input
+        v-if="!location || wantChangeLocation"
         @input="emitFormData"
         @blur="$v.form.location.$touch()"
         v-model="form.location"
@@ -27,6 +35,7 @@ export default {
   name: 'MeetupLocation',
   data() {
     return {
+      wantChangeLocation: false,
       form: {
         location: null
       }
@@ -43,7 +52,7 @@ export default {
   created() {
     if (this.location) {
       this.form.location = this.location;
-      this.emitFormData()
+      this.emitFormData();
     }
   },
   methods: {
@@ -52,6 +61,13 @@ export default {
         data: this.form,
         isValid: !this.$v.$invalid
       });
+    },
+    toggleLocation() {
+      if (this.location) {
+        this.form.location = this.location;
+        this.emitFormData();
+      }
+      this.wantChangeLocation = !this.wantChangeLocation;
     }
   }
 };
