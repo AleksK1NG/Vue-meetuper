@@ -35,7 +35,7 @@
     </div>
     <div class="container">
       <section class="section page-find">
-        <div class="columns cover is-multiline">
+        <div v-if="meetups.length > 0" class="columns cover is-multiline">
           <div
             v-for="meetup of meetups"
             :key="meetup._id"
@@ -77,7 +77,7 @@
             </router-link>
           </div>
         </div>
-        <div>
+        <div v-else>
           <span class="tag is-warning is-large"
             >No meetups found :( You might try to change search criteria
             :)</span
@@ -110,14 +110,13 @@ export default {
       if (!this.locData || this.locData === '') {
         this.$store.dispatch('fetchMeetups');
       }
-      if (this.locData) {
-        debugger;
+      if (this.locData && this.locData !== '') {
         this.filter['location'] = this.locData
           .toLowerCase()
           .replace(/[\s,]+/g, '')
           .trim();
+        this.$store.dispatch('fetchMeetups', { filter: this.filter });
       }
-      this.$store.dispatch('fetchMeetups', { filter: this.filter });
     },
     updateMessage(e) {
       this.locData = e.target.value;
