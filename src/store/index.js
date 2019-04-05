@@ -6,6 +6,7 @@ import threads from './modules/threads';
 import meetups from './modules/meetups';
 import auth from './modules/auth';
 import stats from './modules/stats';
+import meta from './modules/meta';
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     threads,
     meetups,
     auth,
-    stats
+    stats,
+    meta
   }
 });
