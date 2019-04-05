@@ -16,7 +16,7 @@
               <br />
             </p>
             <p class="tagline">
-              I am very productive and good programmer
+              {{ user.info }}
             </p>
           </div>
           <div
