@@ -5,42 +5,41 @@
         <div class="columns is-mobile is-multiline">
           <div class="column is-2">
             <figure class="image  header-icon user-profile-image">
-              <!-- TODO: Get user avatar here -->
               <img class="is-rounded" :src="user.avatar" />
             </figure>
           </div>
           <div class="column is-4-tablet is-10-mobile name">
             <p>
-              <!-- TODO: Display user name here -->
               <span class="title is-bold">{{ user.name }}</span>
               <br />
-              <!-- Here will be user update functionality -->
               <button class="button is-primary is-outlined m-t-sm">
                 {{ user.info }}
               </button>
               <br />
             </p>
-            <!-- TODO: User Info Here if any -->
             <p class="tagline">
               I am very productive and good programmer
             </p>
           </div>
-          <!-- TODO: Set Active Tab to 'meetups' and class to 'isActive' -->
           <div
+            @click="activeTab = 'meetups'"
+            :class="{ isActive: activeTab === 'meetups' }"
             class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
           >
             <p class="stat-val">{{ statsMeetups.count }}</p>
             <p class="stat-key">Meetups</p>
           </div>
-          <!-- TODO: Set Active Tab to 'threads' and class to 'isActive' -->
           <div
+            @click="activeTab = 'threads'"
+            :class="{ isActive: activeTab === 'threads' }"
             class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
           >
             <p class="stat-val">{{ statsThreads.count }}</p>
             <p class="stat-key">Threads</p>
           </div>
-          <!-- TODO: Set Active Tab to 'posts' and class to 'isActive' -->
           <div
+            @click="activeTab = 'posts'"
+            :class="{ isActive: activeTab === 'posts' }"
             class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
           >
             <p class="stat-val">{{ statsPosts.count }}</p>
@@ -48,9 +47,10 @@
           </div>
         </div>
       </div>
-      <!-- TODO: Display this div when activeTab === 'meetups' -->
-      <div class="columns is-mobile is-multiline">
-        <!-- TODO: Iterate over meetups -->
+      <div
+        v-if="activeTab === 'meetups'"
+        class="columns is-mobile is-multiline"
+      >
         <div
           v-for="meetup in statsMeetups.data"
           :key="meetup._id"
@@ -60,7 +60,6 @@
           <div class="card">
             <div class="card-image">
               <figure class="image is-4by3">
-                <!-- TODO: Display Meetup Image -->
                 <img :src="meetup.image" />
               </figure>
             </div>
@@ -78,7 +77,6 @@
                 </div>
               </div>
               <div class="content">
-                <!-- TODO: Display Meetup shortInfo -->
                 <p>
                   {{ meetup.shortInfo }}
                 </p>
@@ -92,9 +90,10 @@
           <br />
         </div>
       </div>
-      <!-- TODO: Display this div when activeTab === 'threads' -->
-      <div class="columns is-mobile is-multiline">
-        <!-- TODO: Iterate over threads -->
+      <div
+        v-if="activeTab === 'threads'"
+        class="columns is-mobile is-multiline"
+      >
         <div
           v-for="thread in statsThreads.data"
           :key="thread._id"
@@ -105,7 +104,6 @@
             <div class="card-content">
               <div class="media">
                 <div class="media-content">
-                  <!-- TODO: Display thread thread title -->
                   <p class="title is-4">{{ thread.title }}</p>
                 </div>
               </div>
@@ -118,9 +116,8 @@
           <br />
         </div>
       </div>
-      <!-- TODO: Display this div when activeTab === 'posts' -->
-      <div class="columns is-mobile is-multiline">
-        <!-- TODO: Iterate over posts -->
+
+      <div v-if="activeTab === 'posts'" class="columns is-mobile is-multiline">
         <div
           v-for="post in statsPosts.data"
           :key="post._id"
@@ -131,7 +128,6 @@
             <div class="card-content">
               <div class="media">
                 <div class="media-content">
-                  <!-- TODO: Display post text -->
                   <p class="title is-4">{{ post.text }}</p>
                 </div>
               </div>
@@ -152,6 +148,11 @@
 import { mapGetters } from 'vuex';
 export default {
   name: 'PageProfile',
+  data() {
+    return {
+      activeTab: 'meetups'
+    };
+  },
   computed: {
     ...mapGetters(['statsMeetups', 'statsPosts', 'statsThreads', 'user'])
   },
