@@ -40,6 +40,7 @@ const usersRoutes = require('./routes/users');
 const threadsRoutes = require('./routes/threads');
 const postsRoutes = require('./routes/posts');
 const categoriesRoutes = require('./routes/categories');
+const apiRoutes = require('./routes/api');
 
 mongoose
   .connect(config.DB_URI, { useNewUrlParser: true })
@@ -72,6 +73,7 @@ app.use(bodyParser.json());
 // app.use(passport.initialize());
 // app.use(passport.session());
 
+app.use('/api/v1/', apiRoutes);
 app.use('/api/v1/meetups', meetupsRoutes);
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/posts', postsRoutes);
