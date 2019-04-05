@@ -7,10 +7,18 @@
           <div class="level">
             <div class="level-left">
               <div class="level-item">
-                <input type="text" class="input" placeholder="New York" />
+                <input
+                  v-model="location"
+                  type="text"
+                  class="input"
+                  placeholder="New York"
+                />
               </div>
-              <div class="level-item">
-                <span>Meetups in New York, USA</span>
+              <div
+                v-if="location && meetups && meetups.length > 0"
+                class="level-item"
+              >
+                <span>Meetups in {{ meetups[0].location }}</span>
               </div>
             </div>
             <div class="level-right">
@@ -83,10 +91,9 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'PageMeetupFind',
   computed: {
-    ...mapGetters(['meetups'])
+    ...mapGetters(['meetups', 'location'])
   },
   created() {
-
     this.$store.dispatch('fetchMeetups');
   }
 };

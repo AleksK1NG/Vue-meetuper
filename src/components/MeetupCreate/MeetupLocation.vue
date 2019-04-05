@@ -2,8 +2,8 @@
   <div>
     <h1 class="title m-b-sm">What's your new Meetup location?</h1>
     <div class="m-b-lg">
-      <span class="subtitle">New York, US</span>
-      <a>(change location)</a>
+      <span v-if="location" class="subtitle">{{ location }}</span>
+      <a v-if="location">(change location)</a>
       <input
         @input="emitFormData"
         @blur="$v.form.location.$touch()"
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 export default {
   name: 'MeetupLocation',
@@ -31,14 +32,26 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapGetters(['location'])
+  },
   validations: {
     form: {
       location: { required }
     }
   },
+  created() {
+    if (this.location) {
+      this.form.location = this.location;
+      this.emitFormData()
+    }
+  },
   methods: {
     emitFormData() {
-      this.$emit('stepUpdated', { data: this.form, isValid: !this.$v.$invalid });
+      this.$emit('stepUpdated', {
+        data: this.form,
+        isValid: !this.$v.$invalid
+      });
     }
   }
 };

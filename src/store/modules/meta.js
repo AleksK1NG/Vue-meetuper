@@ -11,6 +11,7 @@ export default {
     error: null,
     loadingMeta: false
   },
+
   getters: {
     metaData(state) {
       return state.metaData;
@@ -23,6 +24,7 @@ export default {
       return city && country ? city + ', ' + country : '';
     }
   },
+
   mutations: {
     [SET_META_DATA](state, metaData) {
       state.metaData = metaData;
@@ -36,9 +38,11 @@ export default {
       state.error = error;
     }
   },
+
   actions: {
     async fetchMetaData({ commit }) {
       commit(SET_LOADING, true);
+
       try {
         const { data } = await axios.get('/api/v1');
         commit(SET_META_DATA, data);

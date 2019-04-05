@@ -23,6 +23,9 @@ export default {
   },
   computed: {
     ...mapGetters(['isAuthResolved'])
+  },
+  created() {
+    this.$store.dispatch('fetchMetaData')
   }
 };
 </script>

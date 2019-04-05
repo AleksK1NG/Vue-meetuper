@@ -33,8 +33,11 @@
         Next
       </button>
       <!-- Confirm Data -->
-      <button v-else class="button is-primary" @click="emitMeetupConfirm">Confirm</button>
+      <button v-else class="button is-primary" @click="emitMeetupConfirm">
+        Confirm
+      </button>
     </div>
+    <pre><code>{{form}}</code></pre>
   </div>
 </template>
 
@@ -109,7 +112,7 @@ export default {
       this.canProceed = step.isValid;
     },
     emitMeetupConfirm() {
-      this.$emit('meetupConfirmed', this.form)
+      this.$emit('meetupConfirmed', this.form);
     }
   }
 };
