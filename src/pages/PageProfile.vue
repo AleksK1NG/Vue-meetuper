@@ -12,9 +12,7 @@
             <p>
               <span class="title is-bold">{{ user.name }}</span>
               <br />
-              <button class="button is-primary is-outlined m-t-sm">
-                {{ user.info }}
-              </button>
+              <UserUpdateModal />
               <br />
             </p>
             <p class="tagline">
@@ -146,8 +144,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import UserUpdateModal from '../components/UserUpdateModal';
 export default {
   name: 'PageProfile',
+  components: { UserUpdateModal },
   data() {
     return {
       activeTab: 'meetups'
