@@ -12,7 +12,7 @@
             <p>
               <span class="title is-bold">{{ user.name }}</span>
               <br />
-              <UserUpdateModal :authUser="user" />
+              <UserUpdateModal @userSubmitted="updateUser" :authUser="user" />
               <br />
             </p>
             <p class="tagline">
@@ -158,6 +158,26 @@ export default {
   },
   created() {
     this.$store.dispatch('fetchUserStats');
+  },
+  methods: {
+    updateUser({ user, done }) {
+      this.$store
+        .dispatch('updateUser', user)
+        .then(() => {
+          this.$toasted.success('Success Update :)', {
+            duration: 5000,
+            position: 'top-center'
+          });
+          done();
+        })
+        .catch((errorMessage) => {
+          this.$toasted.error(errorMessage || 'Error :(', {
+            duration: 5000,
+            position: 'top-center'
+          });
+          done();
+        });
+    }
   }
 };
 </script>

@@ -14,6 +14,7 @@ import Vue from 'vue';
 
 export default {
   namespace: true,
+
   state: {
     user: null,
     error: null,
@@ -24,21 +25,26 @@ export default {
     user(state) {
       return state.user || null;
     },
+
     isAuthenticated(state) {
       return !!state.user;
     },
+
     authLoading(state) {
       return state.loading;
     },
+
     isAuthResolved(state) {
       return state.isAuthResolved;
     },
+
     // cb for get second param from outside
     isMeetupOwner: (state) => (meetupCreatorId) => {
       if (!state.user) return false;
 
       return state.user._id === meetupCreatorId;
     },
+
     isMember: (state) => (meetupId) => {
       return (
         state.user &&
@@ -51,15 +57,19 @@ export default {
     [SET_USER](state, user) {
       state.user = user;
     },
+
     [SET_ERROR](state, error) {
       state.error = error;
     },
+
     [SET_LOADING](state, payload) {
       state.loading = payload;
     },
+
     [SET_IS_AUTH_RESOLVED](state, payload) {
       return (state.isAuthResolved = payload);
     },
+
     [SET_MEETUP_TO_AUTH_USER](state, meetups) {
       return Vue.set(state.user, 'joinedMeetups', meetups);
     }
@@ -81,6 +91,7 @@ export default {
         return rejectError(error);
       }
     },
+
     async registerUser({ commit }, userData) {
       commit(SET_LOADING, true);
       try {
@@ -95,6 +106,7 @@ export default {
         return rejectError(error);
       }
     },
+
     async getAuthUser({ commit, getters }) {
       const authUser = getters['user'];
       const token = localStorage.getItem('meetuper-jwt');
@@ -123,6 +135,7 @@ export default {
         commit(SET_IS_AUTH_RESOLVED, true);
       }
     },
+
     async logout({ commit }) {
       commit(SET_LOADING, true);
       try {
@@ -136,11 +149,13 @@ export default {
         commit(SET_LOADING, false);
       }
     },
+
     async addMeetupToAuthUser({ commit, state }, meetupId) {
       // new user meetups
       const userMeetups = [...state.user.joinedMeetups, meetupId];
       commit(SET_MEETUP_TO_AUTH_USER, userMeetups);
     },
+
     async removeMeetupFromAuthUser({ commit, state }, meetupId) {
       const userMeetupsIds = [...state.user.joinedMeetups];
       const index = userMeetupsIds.findIndex(
@@ -150,6 +165,20 @@ export default {
       userMeetupsIds.splice(index, 1);
 
       commit(SET_MEETUP_TO_AUTH_USER, userMeetupsIds);
+    },
+
+    async updateUser({ commit }, user) {
+      commit(SET_LOADING, true);
+      try {
+        const { data } = await axiosInstance.patch(`/api/v1/users/${user._id}`, user);
+        commit(SET_USER, data);
+        commit(SET_LOADING, false);
+        return Promise.resolve(data);
+      } catch (error) {
+        commit(SET_ERROR, error);
+        commit(SET_LOADING, false);
+        return rejectError(error);
+      }
     }
   }
 };
