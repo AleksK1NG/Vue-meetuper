@@ -9,6 +9,7 @@ import axios from 'axios';
 import router from '../../router';
 import axiosInstance from '../../services/axios';
 import Vue from 'vue';
+import { applyFilters } from '../../helpers/fetchMeetupsFilters';
 
 export default {
   namespace: true,
@@ -19,21 +20,26 @@ export default {
     error: null,
     loading: false
   },
+
   getters: {
     meetups(state) {
       return state.meetups;
     },
+
     meetup(state) {
       return state.meetup;
     },
+
     meetupsLoading(state) {
       return state.loading;
     }
   },
+
   mutations: {
     [SET_MEETUPS](state, meetups) {
       state.meetups = meetups;
     },
+
     [SET_MEETUP](state, meetup) {
       state.meetup = meetup;
     },
@@ -41,18 +47,22 @@ export default {
     [SET_ERROR](state, error) {
       state.error = error;
     },
+
     [SET_LOADING](state, payload) {
       state.loading = payload;
     },
+
     [ADD_USERS_TO_MEETUP](state, joinedPeople) {
       Vue.set(state.meetup, 'joinedPeople', joinedPeople);
     }
   },
   actions: {
-    async fetchMeetups({ commit }) {
+    async fetchMeetups({ commit }, options = {}) {
       commit(SET_LOADING, true);
+      const url = applyFilters('/api/v1/meetups', options.filter);
+
       try {
-        const { data } = await axios.get('/api/v1/meetups');
+        const { data } = await axios.get(url);
         commit(SET_MEETUPS, data);
         commit(SET_LOADING, false);
       } catch (error) {
@@ -60,8 +70,10 @@ export default {
         commit(SET_LOADING, false);
       }
     },
+
     async fetchMeetupById({ commit }, id) {
       commit(SET_MEETUP, {});
+
       commit(SET_LOADING, true);
       try {
         const { data } = await axios.get(`/api/v1/meetups/${id}`);
@@ -72,6 +84,7 @@ export default {
         commit(SET_LOADING, false);
       }
     },
+
     async createMeetup({ commit, rootState }, meetupToCreate) {
       // Add Creator
       meetupToCreate.meetupCreator = rootState.auth.user;
@@ -98,6 +111,7 @@ export default {
         return Promise.reject(error);
       }
     },
+
     async joinMeetup({ commit, rootState, dispatch, state }, meetupId) {
       const user = rootState.auth.user;
 
@@ -121,6 +135,7 @@ export default {
         return Promise.reject(error);
       }
     },
+
     async leaveMeetup({ commit, rootState, dispatch, state }, meetupId) {
       const user = rootState.auth.user;
 

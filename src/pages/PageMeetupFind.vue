@@ -8,7 +8,9 @@
             <div class="level-left">
               <div class="level-item">
                 <input
-                  v-model="location"
+                  :value="locData"
+                  @input="updateMessage"
+                  @keyup.enter="fetchMeetups"
                   type="text"
                   class="input"
                   placeholder="New York"
@@ -90,11 +92,36 @@
 import { mapGetters } from 'vuex';
 export default {
   name: 'PageMeetupFind',
+  data() {
+    return {
+      filter: {},
+      locData: this.location
+    };
+  },
   computed: {
     ...mapGetters(['meetups', 'location'])
   },
   created() {
-    this.$store.dispatch('fetchMeetups');
+    // Default simply fetchMeetups() for all Meetups fetch
+    this.fetchMeetups();
+  },
+  methods: {
+    fetchMeetups() {
+      if (!this.locData || this.locData === '') {
+        this.$store.dispatch('fetchMeetups');
+      }
+      if (this.locData) {
+        debugger;
+        this.filter['location'] = this.locData
+          .toLowerCase()
+          .replace(/[\s,]+/g, '')
+          .trim();
+      }
+      this.$store.dispatch('fetchMeetups', { filter: this.filter });
+    },
+    updateMessage(e) {
+      this.locData = e.target.value;
+    }
   }
 };
 </script>
