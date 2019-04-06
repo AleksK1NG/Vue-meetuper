@@ -22,6 +22,12 @@ const router = new Router({
       component: PageHome
     },
     {
+      path: '/find/:category',
+      name: 'PageMeetupFindCategory',
+      component: PageMeetupFind,
+      props: true
+    },
+    {
       path: '/find',
       name: 'PageMeetupFind',
       component: PageMeetupFind

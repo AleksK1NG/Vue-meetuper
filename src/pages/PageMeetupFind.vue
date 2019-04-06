@@ -92,6 +92,12 @@
 import { mapGetters } from 'vuex';
 export default {
   name: 'PageMeetupFind',
+  props: {
+    category: {
+      required: false,
+      type: String
+    }
+  },
   data() {
     return {
       filter: {},
@@ -115,6 +121,10 @@ export default {
           .toLowerCase()
           .replace(/[\s,]+/g, '')
           .trim();
+        this.$store.dispatch('fetchMeetups', { filter: this.filter });
+      }
+      if (this.category) {
+        this.filter['category'] = this.category;
         this.$store.dispatch('fetchMeetups', { filter: this.filter });
       }
     },
