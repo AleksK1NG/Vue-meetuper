@@ -95,6 +95,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import pageLoader from '../mixins/pageLoader';
 export default {
   name: 'PageMeetupFind',
   props: {
@@ -103,6 +104,7 @@ export default {
       type: String
     }
   },
+  mixins: [pageLoader],
   data() {
     return {
       filter: {},
@@ -126,11 +128,29 @@ export default {
           .toLowerCase()
           .replace(/[\s,]+/g, '')
           .trim();
-        this.$store.dispatch('fetchMeetups', { filter: this.filter });
+        this.pageLoader_isDataLoaded = false;
+        this.$store
+          .dispatch('fetchMeetups', { filter: this.filter })
+          .then(() => {
+            this.pageLoader_resolveData();
+          })
+          .catch((err) => {
+            this.pageLoader_resolveData();
+            console.log(err);
+          });
       }
       if (this.category) {
         this.filter['category'] = this.category;
-        this.$store.dispatch('fetchMeetups', { filter: this.filter });
+        this.pageLoader_isDataLoaded = false;
+        this.$store
+          .dispatch('fetchMeetups', { filter: this.filter })
+          .then(() => {
+            this.pageLoader_resolveData();
+          })
+          .catch((err) => {
+            this.pageLoader_resolveData();
+            console.log(err);
+          });
       }
     },
     updateMessage(e) {

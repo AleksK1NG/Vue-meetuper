@@ -65,9 +65,11 @@ export default {
         const { data } = await axios.get(url);
         commit(SET_MEETUPS, data);
         commit(SET_LOADING, false);
+        return Promise.resolve(data);
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
+        return Promise.reject(error);
       }
     },
 
