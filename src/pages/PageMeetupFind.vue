@@ -22,6 +22,11 @@
               >
                 <span>Meetups in {{ meetups[0].location }}</span>
               </div>
+              <div v-if="category" class="level-item">
+                <button @click="cancelCategory" class="button is-danger">
+                  {{ category }} X
+                </button>
+              </div>
             </div>
             <div class="level-right">
               <div class="level-item">
@@ -130,6 +135,9 @@ export default {
     },
     updateMessage(e) {
       this.locData = e.target.value;
+    },
+    cancelCategory() {
+      this.$router.push({ name: 'PageMeetupFind' });
     }
   }
 };
