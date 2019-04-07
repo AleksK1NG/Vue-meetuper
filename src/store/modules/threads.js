@@ -1,5 +1,6 @@
 import {
   ADD_THREAD_TO_THREADS,
+  RESET_THREADS,
   SAVE_POST_TO_THREAD,
   SET_ALL_THREADS_LOADED,
   SET_ERROR,
@@ -52,6 +53,10 @@ export default {
       // }
     },
 
+    [RESET_THREADS](state, payload) {
+      state.threads = payload;
+    },
+
     [SET_ERROR](state, error) {
       state.error = error;
     },
@@ -78,10 +83,15 @@ export default {
   },
 
   actions: {
-    async fetchThreads({ commit }, { meetupId, filter = {} }) {
+    async fetchThreads({ commit }, { meetupId, filter = {}, init }) {
+      if (init) {
+
+        commit(RESET_THREADS, []);
+      }
+
+
       const url = applyFilters(`/api/v1/threads?meetupId=${meetupId}`, filter);
 
-      // commit(SET_THREADS, []);
       commit(SET_LOADING, true);
 
       try {
@@ -90,7 +100,7 @@ export default {
         } = await axios.get(url);
         commit(SET_THREADS, threads);
         commit(SET_ALL_THREADS_LOADED, isAllDataLoaded);
-        debugger;
+        debugger
         commit(SET_LOADING, false);
         return Promise.resolve(threads);
       } catch (error) {

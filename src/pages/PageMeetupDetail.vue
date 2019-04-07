@@ -189,7 +189,20 @@ export default {
   created() {
     this.$store.dispatch('fetchMeetupById', this.$route.params.id);
     // this.$store.dispatch('fetchThreads', this.$route.params.id);
-    this.fetchThreadsHandler();
+    const filter = {
+      pageNum: this.threadPageNum,
+      pageSize: this.threadPageSize
+    };
+    this.$store
+      .dispatch('fetchThreads', {
+        meetupId: this.$route.params.id,
+        filter,
+        init: true
+      })
+      .then(() => {
+        this.threadPageNum++;
+      });
+    // this.fetchThreadsHandler();
 
     if (this.isAuthenticated) {
       this.$socket.emit('meetup/subscribe', this.$route.params.id);
@@ -217,7 +230,8 @@ export default {
       this.$store
         .dispatch('fetchThreads', {
           meetupId: this.$route.params.id,
-          filter
+          filter,
+          init: false
         })
         .then(() => {
           this.threadPageNum++;
