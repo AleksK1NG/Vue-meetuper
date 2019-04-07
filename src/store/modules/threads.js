@@ -85,10 +85,8 @@ export default {
   actions: {
     async fetchThreads({ commit }, { meetupId, filter = {}, init }) {
       if (init) {
-
         commit(RESET_THREADS, []);
       }
-
 
       const url = applyFilters(`/api/v1/threads?meetupId=${meetupId}`, filter);
 
@@ -100,7 +98,6 @@ export default {
         } = await axios.get(url);
         commit(SET_THREADS, threads);
         commit(SET_ALL_THREADS_LOADED, isAllDataLoaded);
-        debugger
         commit(SET_LOADING, false);
         return Promise.resolve(threads);
       } catch (error) {
