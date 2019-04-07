@@ -120,6 +120,13 @@
             <!-- Thread List START -->
             <ThreadList :threads="orderedThreads" :canMakePost="canMakePost" />
             <!-- Thread List END -->
+            <button
+              v-if="!isAllThreadsLoaded"
+              @click="fetchThreadsHandler"
+              class="button is-primary"
+            >
+              Load More Threads
+            </button>
           </div>
         </div>
       </div>
@@ -133,10 +140,19 @@ import ThreadCreateModal from '../components/ThreadCreateModal';
 import ThreadList from '../components/ThreadList';
 export default {
   name: 'PageMeetupDetail',
+
   components: {
     ThreadCreateModal,
     ThreadList
   },
+
+  data() {
+    return {
+      threadPageNum: 1,
+      threadPageSize: 5
+    };
+  },
+
   computed: {
     ...mapGetters([
       'meetup',
@@ -145,43 +161,76 @@ export default {
       'isMeetupOwner',
       'isMember',
       'user',
-      'orderedThreads'
+      'orderedThreads',
+      'isAllThreadsLoaded'
     ]),
 
     meetupCrearor() {
       return this.meetup.meetupCreator || {};
     },
+
     isMeetupOwner() {
       return this.$store.getters['isMeetupOwner'](this.meetupCrearor._id);
     },
+
     isMember() {
       return this.$store.getters['isMember'](this.meetup._id);
     },
+
     canJoin() {
       return !this.isMeetupOwner && this.isAuthenticated && !this.isMember;
     },
+
     canMakePost() {
       return this.isAuthenticated && (this.isMember || this.isMeetupOwner);
     }
   },
+
   created() {
     this.$store.dispatch('fetchMeetupById', this.$route.params.id);
-    this.$store.dispatch('fetchThreads', this.$route.params.id);
+    // this.$store.dispatch('fetchThreads', this.$route.params.id);
+    this.fetchThreadsHandler();
 
     if (this.isAuthenticated) {
       this.$socket.emit('meetup/subscribe', this.$route.params.id);
       this.$socket.on('meetup/postPublished', this.addPostToThreadHandler);
     }
   },
+
   destroyed() {
-    this.$socket.removeListener('meetup/postPublished', this.addPostToThreadHandler);
+    this.$socket.removeListener(
+      'meetup/postPublished',
+      this.addPostToThreadHandler
+    );
     this.$socket.emit('meetup/unsubscribe', this.meetup._id);
   },
+
   methods: {
     ...mapActions(['addPostToThread']),
+
+    fetchThreadsHandler() {
+      const filter = {
+        pageNum: this.threadPageNum,
+        pageSize: this.threadPageSize
+      };
+
+      this.$store
+        .dispatch('fetchThreads', {
+          meetupId: this.$route.params.id,
+          filter
+        })
+        .then(() => {
+          this.threadPageNum++;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     addPostToThreadHandler(post) {
       this.addPostToThread({ post, threadId: post.thread });
     },
+
     joinMeetup() {
       console.log('Join Meetup');
       this.$store
@@ -199,6 +248,7 @@ export default {
           });
         });
     },
+
     leaveMeetup() {
       this.$store
         .dispatch('leaveMeetup', this.meetup._id)
@@ -215,6 +265,7 @@ export default {
           });
         });
     },
+
     createThread({ title, done }) {
       this.$store
         .dispatch('postThreads', { title, meetupId: this.meetup._id })

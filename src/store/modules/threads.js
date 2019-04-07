@@ -9,6 +9,7 @@ import {
 import axios from 'axios';
 import axiosInstance from '../../services/axios';
 import Vue from 'vue';
+import { applyFilters } from '../../helpers/fetchMeetupsFilters';
 
 export default {
   namespace: true,
@@ -43,7 +44,12 @@ export default {
 
   mutations: {
     [SET_THREADS](state, threads) {
-      state.threads = threads;
+      return state.threads.push(...threads);
+      // if (state.threads && state.threads.leading > 0) {
+      //   state.threads.push(...threads);
+      // } else {
+      //   state.threads = threads;
+      // }
     },
 
     [SET_ERROR](state, error) {
@@ -67,24 +73,30 @@ export default {
     },
 
     [SET_ALL_THREADS_LOADED](state, payload) {
-      return (state.isAllDataLoaded = payload);
+      state.isAllThreadsLoaded = payload;
     }
   },
 
   actions: {
-    async fetchThreads({ commit }, meetupId) {
-      commit(SET_THREADS, []);
+    async fetchThreads({ commit }, { meetupId, filter = {} }) {
+      const url = applyFilters(`/api/v1/threads?meetupId=${meetupId}`, filter);
+
+      // commit(SET_THREADS, []);
       commit(SET_LOADING, true);
+
       try {
         const {
           data: { threads, isAllDataLoaded }
-        } = await axios.get(`/api/v1/threads?meetupId=${meetupId}`);
+        } = await axios.get(url);
         commit(SET_THREADS, threads);
         commit(SET_ALL_THREADS_LOADED, isAllDataLoaded);
+        debugger;
         commit(SET_LOADING, false);
+        return Promise.resolve(threads);
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
+        return Promise.reject(error);
       }
     },
 
