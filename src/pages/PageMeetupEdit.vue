@@ -85,9 +85,9 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import Datepicker from 'vuejs-datepicker';
 import VueTimepicker from 'vue2-timepicker';
-import moment from 'moment';
 
 export default {
   name: 'PageMeetupEdit',
@@ -95,14 +95,40 @@ export default {
     Datepicker,
     VueTimepicker
   },
+
   props: {
     meetupId: {
       required: true,
       type: String
     }
   },
+
+  computed: {
+    ...mapGetters(['meetup', 'user']),
+    meetupCreator() {
+      return this.meetup.meetupCreator;
+    }
+  },
+
   created() {
-    console.log('meetup edit page id =>', this.meetupId);
+    this.fetchMeetupByIdHandler(this.user);
+  },
+
+  methods: {
+    ...mapActions(['fetchMeetupById']),
+    fetchMeetupByIdHandler(user) {
+      this.fetchMeetupById(this.meetupId)
+        .then((meetup) => {
+          debugger;
+          if (meetup.meetupCreator._id !== user._id) {
+            this.$router.push({ path: '/not-authorized' });
+          }
+          // if (meetup.meetupCreator._id !== this.user._id) {
+          //   this.$router.push({ path: '/not-authorized' });
+          // }
+        })
+        .catch((err) => console.log(err));
+    }
   }
 };
 </script>

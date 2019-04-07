@@ -81,9 +81,11 @@ export default {
         const { data } = await axios.get(`/api/v1/meetups/${id}`);
         commit(SET_MEETUP, data);
         commit(SET_LOADING, false);
+        return Promise.resolve(data);
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
+        return Promise.reject(error);
       }
     },
 
