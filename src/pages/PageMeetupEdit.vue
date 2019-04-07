@@ -4,21 +4,27 @@
       <div class="hero-body">
         <div class="container">
           <h2 class="subtitle">
-            Some Date
+            {{ meetupWithDate.startDate | formatDate }}
           </h2>
           <div class="field">
             Some Meetup Title
-            <input class="title input w-50" type="text" />
+            <input
+              v-model="meetupWithDate.title"
+              class="title input w-50"
+              type="text"
+            />
           </div>
           <article class="media v-center">
             <figure class="media-left">
               <p class="image is-64x64">
-                <img class="is-rounded" />
+                <img class="is-rounded" :src="meetupCreator.avatar" />
               </p>
             </figure>
             <div class="media-content">
               <div class="content">
-                <p>Created by <strong>Name Here</strong></p>
+                <p>
+                  Created by <strong>{{ meetupCreator.name }}</strong>
+                </p>
               </div>
             </div>
           </article>
@@ -39,27 +45,45 @@
                   <!-- TIMES START -->
                   <p><b>Time</b></p>
                   <datepicker
-                    :value="new Date()"
+                    @input="setDate"
+                    :value="meetupWithDate.startDate"
+                    :disabledDates="disabledDates"
                     :input-class="'input'"
                   ></datepicker>
                   <div class="field m-t-md">
-                    <vue-timepicker :minute-interval="10"></vue-timepicker>
+                    <vue-timepicker
+                      v-model="meetupWithDate.timeFrom"
+                      @change="changeTime($event, 'timeFrom')"
+                      :minute-interval="10"
+                    ></vue-timepicker>
                   </div>
                   <div class="field">
-                    <vue-timepicker :minute-interval="10"></vue-timepicker>
+                    <vue-timepicker
+                      v-model="meetupWithDate.timeTo"
+                      @change="changeTime($event, 'timeTo')"
+                      :minute-interval="10"
+                    ></vue-timepicker>
                   </div>
                   <!-- TIMES END -->
                 </div>
                 <div class="meetup-side-box-place m-b-sm">
                   <p><b>How to find us</b></p>
                   <div class="field">
-                    <input class="input" type="text" />
+                    <input
+                      v-model="meetupWithDate.location"
+                      class="input"
+                      type="text"
+                    />
                   </div>
                 </div>
                 <div class="meetup-side-box-more-info">
                   <p><b>Additional Info</b></p>
                   <div class="field">
-                    <textarea class="textarea" rows="5"></textarea>
+                    <textarea
+                      v-model="meetupWithDate.shortInfo"
+                      class="textarea"
+                      rows="5"
+                    ></textarea>
                   </div>
                 </div>
               </div>
@@ -75,7 +99,11 @@
           <div class="column is-7 is-offset-1">
             <div class="content is-medium">
               <h3 class="title is-3">About the Meetup</h3>
-              <textarea class="textarea" rows="5"></textarea>
+              <textarea
+                v-model="meetupWithDate.description"
+                class="textarea"
+                rows="5"
+              ></textarea>
             </div>
           </div>
         </div>
@@ -88,6 +116,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import Datepicker from 'vuejs-datepicker';
 import VueTimepicker from 'vue2-timepicker';
+import moment from 'moment';
 
 export default {
   name: 'PageMeetupEdit',
@@ -103,10 +132,31 @@ export default {
     }
   },
 
+  data() {
+    return {
+      disabledDates: {
+        customPredictor: function(date) {
+          const today = new Date();
+          const yesterday = today.setDate(today.getDate() - 1);
+          return date < yesterday;
+        }
+      }
+    };
+  },
+
   computed: {
-    ...mapGetters(['meetup', 'user']),
+    ...mapGetters(['user', 'meetup']),
     meetupCreator() {
-      return this.meetup.meetupCreator;
+      return this.meetup.meetupCreator || {};
+    },
+
+    meetupWithDate() {
+      if (this.hasValue(this.meetup)) {
+        const timeTo = this.parseTime(this.meetup.timeTo);
+        const timeFrom = this.parseTime(this.meetup.timeFrom);
+        return { ...this.meetup, timeFrom, timeTo };
+      }
+      return {};
     }
   },
 
@@ -128,6 +178,26 @@ export default {
           // }
         })
         .catch((err) => console.log(err));
+    },
+
+    parseTime(time) {
+      const [HH, mm] = time.split(':');
+      return { HH, mm };
+    },
+
+    setDate(date) {
+      this.meetup.startDate = moment(date).format();
+    },
+
+    changeTime({ data }, field) {
+      const minutes = data.mm || '00';
+      const hours = data.HH || '00';
+      this.meetup[field] = hours + ':' + minutes;
+    },
+
+    hasValue(meetup) {
+      const meetupLength = Object.keys(meetup).length;
+      return meetupLength && meetupLength > 0;
     }
   }
 };
