@@ -14,10 +14,8 @@ import filters from './filters';
 
 Vue.use(Vuelidate);
 Vue.use(Toasted);
-/*
- * Socket.io init
- * */
-Vue.use(AppSocket, { connection: 'http://localhost:3001' });
+
+Vue.use(AppSocket, { connection: process.env.VUE_APP_URI });
 
 Vue.config.productionTip = false;
 
