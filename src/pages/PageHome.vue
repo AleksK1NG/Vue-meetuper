@@ -4,7 +4,11 @@
     <div v-if="!loading" class="container">
       <section class="section">
         <div class="m-b-lg">
-          <h1 class="title is-inline">Featured Meetups in "Location"</h1>
+          <h1 class="title is-inline">
+            Featured Meetups<span v-if="location"
+              >, your location is {{ location }}</span
+            >
+          </h1>
           <AppDropdown />
           <router-link
             v-if="user"
@@ -57,29 +61,29 @@ export default {
     CategoryItem,
     MeetupItem
   },
+
   data() {
     return {
       isDataLoaded: false
     };
   },
+
   computed: {
     ...mapGetters([
       'meetups',
       'categories',
       'categoriesLoading',
       'threadsLoding',
-      'user'
+      'user',
+      'location'
     ]),
+
     loading() {
       return this.categoriesLoading && this.threadsLoding;
     }
   },
+
   created() {
-    // console.log(
-    //   'page home loading status => ',
-    //   this.categoriesLoading,
-    //   this.threadsLoding
-    // );
     this.$store.dispatch('fetchMeetups');
     this.$store.dispatch('fetchCategories');
   }

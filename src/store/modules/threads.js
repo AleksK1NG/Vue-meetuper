@@ -46,11 +46,6 @@ export default {
   mutations: {
     [SET_THREADS](state, threads) {
       return state.threads.push(...threads);
-      // if (state.threads && state.threads.leading > 0) {
-      //   state.threads.push(...threads);
-      // } else {
-      //   state.threads = threads;
-      // }
     },
 
     [RESET_THREADS](state, payload) {

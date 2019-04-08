@@ -12,6 +12,7 @@ export default {
     categories(state) {
       return state.categories;
     },
+
     categoriesLoading(state) {
       return state.loading;
     }
@@ -24,14 +25,15 @@ export default {
     [SET_ERROR](state, error) {
       state.error = error;
     },
+
     [SET_LOADING](state, payload) {
-      console.log('loading =>', payload);
       state.loading = payload;
     }
   },
   actions: {
     async fetchCategories({ commit }) {
       commit(SET_LOADING, true);
+
       try {
         const { data } = await axios.get('/api/v1/categories');
         commit(SET_CATEGORIES, data);

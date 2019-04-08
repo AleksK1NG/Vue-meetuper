@@ -73,6 +73,7 @@
 import { required, email } from 'vuelidate/lib/validators';
 export default {
   name: 'PageLogin',
+
   data() {
     return {
       form: {
@@ -81,6 +82,7 @@ export default {
       }
     };
   },
+
   validations: {
     form: {
       email: {
@@ -92,11 +94,13 @@ export default {
       }
     }
   },
+
   computed: {
     isFormInvalid() {
       return this.$v.form.$invalid;
     }
   },
+
   methods: {
     login() {
       this.$v.form.$touch();

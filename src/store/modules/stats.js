@@ -39,9 +39,11 @@ export default {
       state.threads = threads;
       state.posts = posts;
     },
+
     [SET_LOADING](state, payload) {
       state.loadingStats = payload;
     },
+
     [SET_ERROR](state, error) {
       state.error = error;
     }
@@ -49,6 +51,7 @@ export default {
   actions: {
     async fetchUserStats({ commit }) {
       commit(SET_LOADING, true);
+
       try {
         const {
           data: { meetups, threads, posts }

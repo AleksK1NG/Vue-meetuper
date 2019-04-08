@@ -76,8 +76,8 @@ export default {
   },
   actions: {
     async loginWithEmailAndPassword({ commit }, userData) {
-      console.log(userData);
       commit(SET_LOADING, true);
+
       try {
         const { data } = await axios.post('/api/v1/users/login', userData);
         commit(SET_USER, data);
@@ -94,6 +94,7 @@ export default {
 
     async registerUser({ commit }, userData) {
       commit(SET_LOADING, true);
+
       try {
         const { data } = await axios.post('/api/v1/users/register', userData);
         commit(SET_USER, data);
@@ -122,6 +123,7 @@ export default {
       };
 
       commit(SET_LOADING, true);
+
       try {
         const { data } = await axiosInstance.get('/api/v1/users/me', config);
         commit(SET_USER, data);
@@ -138,6 +140,7 @@ export default {
 
     async logout({ commit }) {
       commit(SET_LOADING, true);
+
       try {
         await axios.post('/api/v1/users/logout');
         commit(SET_USER, null);

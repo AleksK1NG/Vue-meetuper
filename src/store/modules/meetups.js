@@ -187,7 +187,6 @@ export default {
           meetupData
         );
         commit(MERGE_MEETUP, data);
-        debugger
         commit(SET_LOADING, false);
         return Promise.resolve(state.meetup);
       } catch (error) {

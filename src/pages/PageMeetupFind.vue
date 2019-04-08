@@ -104,25 +104,31 @@ export default {
       type: String
     }
   },
+
   mixins: [pageLoader],
+
   data() {
     return {
       filter: {},
       locData: this.location
     };
   },
+
   computed: {
     ...mapGetters(['meetups', 'location'])
   },
+
   created() {
     // Default simply fetchMeetups() for all Meetups fetch
     this.fetchMeetups();
   },
+
   methods: {
     fetchMeetups() {
       if (!this.locData || this.locData === '') {
         this.$store.dispatch('fetchMeetups');
       }
+
       if (this.locData && this.locData !== '') {
         this.filter['location'] = this.locData
           .toLowerCase()
@@ -139,6 +145,7 @@ export default {
             console.log(err);
           });
       }
+
       if (this.category) {
         this.filter['category'] = this.category;
         this.pageLoader_isDataLoaded = false;
@@ -153,9 +160,11 @@ export default {
           });
       }
     },
+
     updateMessage(e) {
       this.locData = e.target.value;
     },
+
     cancelCategory() {
       this.$router.push({ name: 'PageMeetupFind' });
     }

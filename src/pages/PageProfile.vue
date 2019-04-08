@@ -64,12 +64,11 @@
             <div class="card-content">
               <div class="media">
                 <div class="media-content">
-                  <!-- TODO: Display Meetup title -->
                   <p class="title is-4">{{ meetup.title }}</p>
-                  <!-- TODO: Display Category name -->
+
                   <p class="subtitle is-6">
                     <span class="tag is-dark subtitle">{{
-                      meetup.category.name
+                      meetup.category.name | capitalize
                     }}</span>
                   </p>
                 </div>
@@ -81,7 +80,14 @@
               </div>
             </div>
             <footer class="card-footer">
-              <a class="card-footer-item">Share</a>
+              <router-link
+                :to="{
+                  name: 'PageMeetupEdit',
+                  params: { meetupId: meetup._id }
+                }"
+                class="card-footer-item"
+                >Edit</router-link
+              >
               <a class="card-footer-item">Delete</a>
             </footer>
           </div>
@@ -148,17 +154,21 @@ import UserUpdateModal from '../components/UserUpdateModal';
 export default {
   name: 'PageProfile',
   components: { UserUpdateModal },
+
   data() {
     return {
       activeTab: 'meetups'
     };
   },
+
   computed: {
     ...mapGetters(['statsMeetups', 'statsPosts', 'statsThreads', 'user'])
   },
+
   created() {
     this.$store.dispatch('fetchUserStats');
   },
+
   methods: {
     updateUser({ user, done }) {
       this.$store
