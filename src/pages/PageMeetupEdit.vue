@@ -4,12 +4,11 @@
       <div class="hero-body">
         <div class="container">
           <h2 class="subtitle">
-            {{ meetupWithDate.startDate | formatDate }}
+            {{ meetup.startDate | formatDate }}
           </h2>
           <div class="field">
-            Some Meetup Title
             <input
-              v-model="meetupWithDate.title"
+              v-model="meetup.title"
               class="title input w-50"
               type="text"
             />
@@ -31,7 +30,12 @@
         </div>
         <div class="is-pulled-right">
           <!-- Update Button -->
-          <button class="button is-success is-large">Update</button>
+          <button
+            @click="updateMeetupHandler"
+            class="button is-success is-large"
+          >
+            Update
+          </button>
         </div>
       </div>
     </section>
@@ -44,22 +48,23 @@
                 <div class="meetup-side-box-date m-b-sm">
                   <!-- TIMES START -->
                   <p><b>Time</b></p>
+
                   <datepicker
                     @input="setDate"
-                    :value="meetupWithDate.startDate"
+                    :value="meetup.startDate"
                     :disabledDates="disabledDates"
                     :input-class="'input'"
                   ></datepicker>
                   <div class="field m-t-md">
                     <vue-timepicker
-                      v-model="meetupWithDate.timeFrom"
+                      v-model="meetup.timeFrom"
                       @change="changeTime($event, 'timeFrom')"
                       :minute-interval="10"
                     ></vue-timepicker>
                   </div>
                   <div class="field">
                     <vue-timepicker
-                      v-model="meetupWithDate.timeTo"
+                      v-model="meetup.timeTo"
                       @change="changeTime($event, 'timeTo')"
                       :minute-interval="10"
                     ></vue-timepicker>
@@ -67,10 +72,25 @@
                   <!-- TIMES END -->
                 </div>
                 <div class="meetup-side-box-place m-b-sm">
+                  <p><b>Choose Category</b></p>
+                  <div class="field">
+                    <div class="select">
+                      <select v-model="meetup.category">
+                        <option
+                          v-for="category of categories"
+                          :value="category"
+                          :key="category.id"
+                          >{{ category.name }}</option
+                        >
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="meetup-side-box-place m-b-sm">
                   <p><b>How to find us</b></p>
                   <div class="field">
                     <input
-                      v-model="meetupWithDate.location"
+                      v-model="meetup.location"
                       class="input"
                       type="text"
                     />
@@ -80,7 +100,7 @@
                   <p><b>Additional Info</b></p>
                   <div class="field">
                     <textarea
-                      v-model="meetupWithDate.shortInfo"
+                      v-model="meetup.shortInfo"
                       class="textarea"
                       rows="5"
                     ></textarea>
@@ -99,8 +119,9 @@
           <div class="column is-7 is-offset-1">
             <div class="content is-medium">
               <h3 class="title is-3">About the Meetup</h3>
+
               <textarea
-                v-model="meetupWithDate.description"
+                v-model="meetup.description"
                 class="textarea"
                 rows="5"
               ></textarea>
@@ -113,13 +134,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
 import Datepicker from 'vuejs-datepicker';
 import VueTimepicker from 'vue2-timepicker';
+import { mapActions } from 'vuex';
 import moment from 'moment';
-
 export default {
-  name: 'PageMeetupEdit',
   components: {
     Datepicker,
     VueTimepicker
@@ -145,39 +164,63 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['user', 'meetup']),
+    meetup() {
+      const meetup = this.$store.state.meetups.meetup;
+      if (this.hasValue(meetup)) {
+        const timeTo = this.parseTime(meetup.timeTo);
+        const timeFrom = this.parseTime(meetup.timeFrom);
+        return { ...meetup, timeFrom, timeTo };
+      }
+      return {};
+    },
+
+    categories() {
+      return this.$store.state.categories.categories;
+    },
+
     meetupCreator() {
       return this.meetup.meetupCreator || {};
     },
 
-    meetupWithDate() {
-      if (this.hasValue(this.meetup)) {
-        const timeTo = this.parseTime(this.meetup.timeTo);
-        const timeFrom = this.parseTime(this.meetup.timeFrom);
-        return { ...this.meetup, timeFrom, timeTo };
-      }
-      return {};
+    authUser() {
+      return this.$store.state.auth.user;
     }
   },
 
   created() {
-    this.fetchMeetupByIdHandler(this.user);
+    this.fetchMeetupByIdHandler();
+    this.fetchCategories();
   },
 
   methods: {
-    ...mapActions(['fetchMeetupById']),
-    fetchMeetupByIdHandler(user) {
+    ...mapActions(['fetchMeetupById', 'updateMeetup']),
+    ...mapActions(['fetchCategories']),
+
+    fetchMeetupByIdHandler() {
       this.fetchMeetupById(this.meetupId)
         .then((meetup) => {
           debugger;
-          if (meetup.meetupCreator._id !== user._id) {
+          if (meetup.meetupCreator._id !== this.authUser._id) {
             this.$router.push({ path: '/not-authorized' });
           }
-          // if (meetup.meetupCreator._id !== this.user._id) {
-          //   this.$router.push({ path: '/not-authorized' });
-          // }
         })
         .catch((err) => console.log(err));
+    },
+
+    updateMeetupHandler() {
+      this.updateMeetup(this.meetup)
+        .then(() => {
+          this.$toasted.success('Success :)', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        })
+        .catch(() => {
+          this.$toasted.error('Error :(', {
+            duration: 5000,
+            position: 'top-center'
+          });
+        });
     },
 
     parseTime(time) {
