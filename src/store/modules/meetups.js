@@ -1,5 +1,6 @@
 import {
   ADD_USERS_TO_MEETUP,
+  MERGE_MEETUP,
   SET_ERROR,
   SET_LOADING,
   SET_MEETUP,
@@ -54,6 +55,10 @@ export default {
 
     [ADD_USERS_TO_MEETUP](state, joinedPeople) {
       Vue.set(state.meetup, 'joinedPeople', joinedPeople);
+    },
+
+    [MERGE_MEETUP](state, updatedMeetup) {
+      state.meetup = { ...state.meetup, ...updatedMeetup };
     }
   },
   actions: {
@@ -161,6 +166,30 @@ export default {
         commit(ADD_USERS_TO_MEETUP, joinedPeople);
         commit(SET_LOADING, false);
         return Promise.resolve(data);
+      } catch (error) {
+        commit(SET_ERROR, error);
+        commit(SET_LOADING, false);
+        return Promise.reject(error);
+      }
+    },
+
+    async updateMeetup({ commit, state }, meetupData) {
+      meetupData.processedLocation = meetupData.location
+        .toLowerCase()
+        .replace(/[\s,]+/g, '')
+        .trim();
+
+      commit(SET_LOADING, true);
+
+      try {
+        const { data } = await axiosInstance.patch(
+          `/api/v1/meetups/${meetupData._id}`,
+          meetupData
+        );
+        commit(MERGE_MEETUP, data);
+        debugger
+        commit(SET_LOADING, false);
+        return Promise.resolve(state.meetup);
       } catch (error) {
         commit(SET_ERROR, error);
         commit(SET_LOADING, false);
